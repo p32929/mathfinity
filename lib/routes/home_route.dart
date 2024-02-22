@@ -58,9 +58,9 @@ class HomeRoute extends StatelessWidget {
 
     getResultButtonRippleColor(int index) {
       if (index == states.state.correctAnsIndex) {
-        return Theme.of(OneContext.instance.context!).colorScheme.primary;
+        return Colors.green;
       } else {
-        return Theme.of(OneContext.instance.context!).colorScheme.error;
+        return Colors.red;
       }
     }
 
@@ -375,13 +375,9 @@ class HomeRoute extends StatelessWidget {
                           (buttonState) {
                             getColor() {
                               if (states.state.isGameRunning) {
-                                return Theme.of(OneContext.instance.context!)
-                                    .colorScheme
-                                    .error;
+                                return Colors.red;
                               } else {
-                                return Theme.of(OneContext.instance.context!)
-                                    .colorScheme
-                                    .primary;
+                                return Colors.green;
                               }
                             }
 
