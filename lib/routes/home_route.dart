@@ -186,8 +186,7 @@ class HomeRoute extends StatelessWidget {
       } else if (operator == 'X') {
         return num1 * num2;
       } else if (operator == '/') {
-        // return num1 / num2;
-        return -1;
+        return num1 ~/ num2;
       }
 
       return 0;
@@ -203,8 +202,11 @@ class HomeRoute extends StatelessWidget {
       int num1 = numbersArray[0];
       int num2 = numbersArray[1];
 
-      states.state.setFirstNumber(num1);
-      states.state.setSecondNumber(num2);
+      if (num2 > num1) {
+        int temp = num1;
+        num1 = num2;
+        num2 = temp;
+      }
 
       var operators = ["+", "-", "X", "/"];
       var operatorsRand = Utils.generateNumberArray(
@@ -214,6 +216,13 @@ class HomeRoute extends StatelessWidget {
       );
       var op0 = operators[operatorsRand[0]];
       states.state.setCurrentOperator(op0);
+
+      if (op0 == "/") {
+        int mod = num1 % num2;
+        num1 -= mod;
+      }
+      states.state.setFirstNumber(num1);
+      states.state.setSecondNumber(num2);
 
       List<int> results = [];
       for (var i = 0; i < operators.length; i++) {
