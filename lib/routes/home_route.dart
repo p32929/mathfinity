@@ -76,7 +76,13 @@ class HomeRoute extends StatelessWidget {
               },
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            if (states.state.correctAnsIndex == index) {
+              states.state.setTotalTrue(states.state.totalTrue + 1);
+            } else {
+              states.state.setTotalFalse(states.state.totalFalse + 1);
+            }
+          },
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: numberButtonSizePadding),
