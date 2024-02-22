@@ -229,7 +229,10 @@ class HomeRoute extends StatelessWidget {
             ),
             Padding(padding: const EdgeInsets.all(rowPaddings)),
             Padding(
-              padding: const EdgeInsets.all(rowPaddings),
+              padding: const EdgeInsets.symmetric(
+                vertical: rowPaddings,
+                horizontal: rowPaddings * 3,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -240,7 +243,10 @@ class HomeRoute extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(rowPaddings),
+              padding: const EdgeInsets.symmetric(
+                vertical: rowPaddings,
+                horizontal: rowPaddings * 3,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
