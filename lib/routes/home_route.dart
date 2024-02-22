@@ -76,13 +76,15 @@ class HomeRoute extends StatelessWidget {
             },
           ),
         ),
-        onPressed: () {
+        onPressed: () async {
           if (states.state.isGameRunning) {
             if (states.state.correctAnsIndex == index) {
               states.state.setTotalTrue(states.state.totalTrue + 1);
             } else {
               states.state.setTotalFalse(states.state.totalFalse + 1);
             }
+
+            await Future.delayed(Duration(milliseconds: 300));
             setNewEquationAndResults();
           }
         },
