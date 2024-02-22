@@ -171,20 +171,22 @@ class HomeRoute extends StatelessWidget {
       );
     }
 
-    startGame() {
+    stopGame() {
+      states.state.setGameRunning(!states.state.isGameRunning);
+      states.state.setCurrentTimer(0);
+      gameTimer?.cancel();
+    }
+
+    onStartStopClicked() {
       if (states.state.isGameRunning) {
-        states.state.setGameRunning(!states.state.isGameRunning);
-        states.state.setCurrentTimer(0);
-        gameTimer?.cancel();
-        //
+        stopGame();
       } else {
         states.state.setGameRunning(!states.state.isGameRunning);
         gameTimer = Timer.periodic(Duration(seconds: 1), (timer) {
           int timeLeft = states.state.timer - timer.tick;
           states.state.setCurrentTimer(timeLeft);
           if (timeLeft <= 0) {
-            timer.cancel();
-            states.state.setGameRunning(!states.state.isGameRunning);
+            stopGame();
           }
         });
       }
@@ -311,7 +313,7 @@ class HomeRoute extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        startGame();
+                        onStartStopClicked();
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
