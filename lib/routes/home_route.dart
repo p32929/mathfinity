@@ -123,7 +123,7 @@ class HomeRoute extends StatelessWidget {
                     ),
                     Slider(
                       min: states.state.minNumber + 1,
-                      max: 999,
+                      max: 99,
                       value: states.state.maxNumber.toDouble(),
                       onChanged: (value) {
                         states.state.setMaxNumber(value.toInt());
@@ -178,22 +178,51 @@ class HomeRoute extends StatelessWidget {
       gameTimer?.cancel();
     }
 
+    int getMathResult(int num1, int num2, String operator) {
+      if (operator == '+') {
+        return num1 + num2;
+      } else if (operator == '-') {
+        return num1 - num2;
+      } else if (operator == 'X') {
+        return num1 * num2;
+      } else if (operator == '/') {
+        // return num1 / num2;
+        return -1;
+      }
+
+      return 0;
+    }
+
     setEquationAndResults() {
-      var array = Utils.generateNumberArray(
+      var numbersArray = Utils.generateNumberArray(
         states.state.minNumber,
         states.state.maxNumber,
         shuffle: true,
       );
-      states.state.setFirstNumber(array[0]);
-      states.state.setSecondNumber(array[1]);
+
+      int num1 = numbersArray[0];
+      int num2 = numbersArray[1];
+
+      states.state.setFirstNumber(num1);
+      states.state.setSecondNumber(num2);
 
       var operators = ["+", "-", "X", "/"];
       var operatorsRand = Utils.generateNumberArray(
         0,
-        operators.length,
+        operators.length - 1,
         shuffle: true,
       );
-      states.state.setCurrentOperator(operators[operatorsRand[0]]);
+      var op0 = operators[operatorsRand[0]];
+      states.state.setCurrentOperator(op0);
+
+      List<int> results = [];
+      for (var i = 0; i < operators.length; i++) {
+        var op = operators[operatorsRand[i]];
+        var resultVal = getMathResult(num1, num2, op);
+        results.add(resultVal);
+      }
+
+      states.state.setResults(results);
     }
 
     startGame() {
@@ -289,9 +318,9 @@ class HomeRoute extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  getNumberWidget(text: "999"),
+                  getNumberWidget(text: states.state.results[0].toString()),
                   Padding(padding: const EdgeInsets.all(rowPaddings)),
-                  getNumberWidget(text: "999"),
+                  getNumberWidget(text: states.state.results[1].toString()),
                 ],
               ),
             ),
@@ -303,9 +332,9 @@ class HomeRoute extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  getNumberWidget(text: "999"),
+                  getNumberWidget(text: states.state.results[2].toString()),
                   Padding(padding: const EdgeInsets.all(rowPaddings)),
-                  getNumberWidget(text: "999"),
+                  getNumberWidget(text: states.state.results[3].toString()),
                 ],
               ),
             ),

@@ -1,7 +1,7 @@
 import 'package:states_rebuilder/states_rebuilder.dart';
 
 class States {
-  int minNumber = 1, maxNumber = 999, timer = 30;
+  int minNumber = 1, maxNumber = 99, timer = 30;
   int firstNumber = 12,
       secondNumber = 34,
       currentTimer = 0,
@@ -9,6 +9,18 @@ class States {
       totalFalse = 0;
   String currentOperator = "X";
   bool isGameRunning = false;
+
+  var results = [
+    12,
+    45,
+    78,
+    36,
+
+    // 9980,
+    // 9980,
+    // 9980,
+    // 9980,
+  ];
 
   setMinNumber(int num) {
     minNumber = num;
@@ -57,6 +69,11 @@ class States {
 
   setGameRunning(bool b) {
     isGameRunning = b;
+    states.notify();
+  }
+
+  setResults(List<int> results) {
+    this.results = results;
     states.notify();
   }
 }
