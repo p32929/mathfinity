@@ -312,7 +312,7 @@ class HomeRoute extends StatelessWidget {
         states.state.setCorrectAnsIndex(i);
       } else {
         if (results[i] < 20) {
-          var newNum = Utils.generateNumberArray(21, 100, shuffle: true)[0];
+          var newNum = Utils.generateNumberArray(50, 100, shuffle: true)[0];
           results[i] = newNum;
         }
       }
@@ -322,6 +322,8 @@ class HomeRoute extends StatelessWidget {
 
   startGame() {
     states.state.setGameRunning(!states.state.isGameRunning);
+    states.state.setCurrentTimer(states.state.maxTimer);
+
     setNewEquationAndResults();
     gameTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       int timeLeft = states.state.maxTimer - timer.tick;
@@ -382,7 +384,9 @@ class HomeRoute extends StatelessWidget {
                   text: states.state.totalTrue.toString(),
                 ),
                 getInfoWidgets(
-                  icon: Icons.hourglass_top,
+                  icon: states.state.currentTimer % 2 == 0
+                      ? Icons.hourglass_top
+                      : Icons.hourglass_bottom,
                   color:
                       Theme.of(OneContext.instance.context!).colorScheme.error,
                   text: states.state.currentTimer.toString(),
