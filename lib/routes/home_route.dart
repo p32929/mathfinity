@@ -304,6 +304,7 @@ class HomeRoute extends StatelessWidget {
     for (var i = 0; i < operators.length; i++) {
       if (operators[i] == op0) {
         results[i] = answer;
+        states.state.setCorrectAnsIndex(i);
         break;
       }
     }
