@@ -130,7 +130,7 @@ class HomeRoute extends StatelessWidget {
               "20 x 13",
               style: TextStyle(
                 fontSize: 36,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w500,
                 letterSpacing: 4,
               ),
             ),
@@ -159,7 +159,7 @@ class HomeRoute extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(padding: const EdgeInsets.all(16)),
+            Padding(padding: const EdgeInsets.all(12)),
             Row(
               children: [
                 Expanded(
@@ -183,7 +183,8 @@ class HomeRoute extends StatelessWidget {
                         child: Text(
                           "START",
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
