@@ -276,6 +276,9 @@ class HomeRoute extends StatelessWidget {
     int num1 = numbersArray[0];
     int num2 = numbersArray[1];
 
+    // int num1 = 1;
+    // int num2 = 2;
+
     if (num2 > num1) {
       int temp = num1;
       num1 = num2;
@@ -283,12 +286,8 @@ class HomeRoute extends StatelessWidget {
     }
 
     var operators = ["+", "-", "X", "/"];
-    var operatorsRand = Utils.generateNumberArray(
-      0,
-      operators.length - 1,
-      shuffle: true,
-    );
-    var op0 = operators[operatorsRand[0]];
+    operators = Utils.shuffleArray<String>(operators);
+    var op0 = operators[0];
     states.state.setCurrentOperator(op0);
 
     if (op0 == "/") {
@@ -297,24 +296,15 @@ class HomeRoute extends StatelessWidget {
     }
     states.state.setFirstNumber(num1);
     states.state.setSecondNumber(num2);
+    var answer = getMathResult(num1, num2, op0);
 
-    List<int> results = [];
+    List<int> results = Utils.generateNumbersCloseTo(answer);
+    operators = Utils.shuffleArray<String>(operators);
+
     for (var i = 0; i < operators.length; i++) {
-      var op = operators[operatorsRand[i]];
-      var resultVal = getMathResult(num1, num2, op);
-      results.add(resultVal);
-    }
-
-    results = Utils.shuffleArray(results);
-    for (var i = 0; i < results.length; i++) {
-      var mr = getMathResult(num1, num2, op0);
-      if (results[i] == mr) {
-        states.state.setCorrectAnsIndex(i);
-      } else {
-        if (results[i] < 20) {
-          var newNum = Utils.generateNumberArray(50, 100, shuffle: true)[0];
-          results[i] = newNum;
-        }
+      if (operators[i] == op0) {
+        results[i] = answer;
+        break;
       }
     }
     states.state.setResults(results);

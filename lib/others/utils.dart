@@ -16,14 +16,14 @@ class Utils {
     }
 
     if (shuffle) {
-      numbers = Utils.shuffleArray(numbers);
+      numbers = Utils.shuffleArray<int>(numbers);
     }
 
     return numbers;
   }
 
-  static List<int> shuffleArray(List<int> array) {
-    List<int> shuffledArray =
+  static List<T> shuffleArray<T>(List<T> array) {
+    List<T> shuffledArray =
         List.from(array); // Make a copy of the original array
     shuffledArray.shuffle();
     return shuffledArray;
@@ -53,4 +53,33 @@ class Utils {
     Prefs.setInt(MAX_NUMBER_SP, states.state.maxNumber);
     Prefs.setInt(MAX_TIMER_SP, states.state.maxTimer);
   }
+
+  static List<int> generateNumbersCloseTo(int number) {
+    List<int> numbers = [];
+    int delta = Utils.generateNumberArray(1, 5, shuffle: true)[0];
+
+    // Generate 4 numbers close to the given number
+    for (int i = 1; i <= 4; i++) {
+      int newNumber = number + delta * i;
+      if (!numbers.contains(newNumber)) {
+        numbers.add(newNumber);
+      }
+    }
+
+    return numbers;
+  }
+
+  // static List<int> generateNumbersCloseTo(int number) {
+  //   List<int> numbers = [];
+  //   int delta = Utils.generateNumberArray(1, 5, shuffle: true)[0];
+
+  //   // Generate 4 numbers close to the given number
+  //   for (int i = 1; i <= 4; i++) {
+  //     numbers.add(number - delta);
+  //     numbers.add(number + delta);
+  //     delta += 5; // Increase delta for the next number
+  //   }
+
+  //   return numbers;
+  // }
 }
