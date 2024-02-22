@@ -56,14 +56,22 @@ class HomeRoute extends StatelessWidget {
       );
     }
 
-    getNumberWidget({String text = "0"}) {
+    getResultButtonRippleColor(int index) {
+      if (index == states.state.correctAnsIndex) {
+        return Theme.of(OneContext.instance.context!).colorScheme.primary;
+      } else {
+        return Theme.of(OneContext.instance.context!).colorScheme.error;
+      }
+    }
+
+    getNumberWidget({int index = 0}) {
       return Expanded(
         child: ElevatedButton(
           style: ButtonStyle(
             overlayColor: MaterialStateProperty.resolveWith(
               (states) {
                 return states.contains(MaterialState.pressed)
-                    ? Colors.red
+                    ? getResultButtonRippleColor(index)
                     : null;
               },
             ),
@@ -73,7 +81,7 @@ class HomeRoute extends StatelessWidget {
             padding:
                 const EdgeInsets.symmetric(vertical: numberButtonSizePadding),
             child: Text(
-              text,
+              states.state.results[index].toString(),
               style: GoogleFonts.varelaRound(
                 fontSize: numberButtonSizePadding,
               ),
@@ -231,6 +239,14 @@ class HomeRoute extends StatelessWidget {
         results.add(resultVal);
       }
 
+      results = Utils.shuffleArray(results);
+      for (var i = 0; i < results.length; i++) {
+        var mr = getMathResult(num1, num2, op0);
+        if (results[i] == mr) {
+          states.state.setCorrectAnsIndex(i);
+          break;
+        }
+      }
       states.state.setResults(results);
     }
 
@@ -327,9 +343,9 @@ class HomeRoute extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  getNumberWidget(text: states.state.results[0].toString()),
+                  getNumberWidget(index: 0),
                   Padding(padding: const EdgeInsets.all(rowPaddings)),
-                  getNumberWidget(text: states.state.results[1].toString()),
+                  getNumberWidget(index: 1),
                 ],
               ),
             ),
@@ -341,9 +357,9 @@ class HomeRoute extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  getNumberWidget(text: states.state.results[2].toString()),
+                  getNumberWidget(index: 2),
                   Padding(padding: const EdgeInsets.all(rowPaddings)),
-                  getNumberWidget(text: states.state.results[3].toString()),
+                  getNumberWidget(index: 3),
                 ],
               ),
             ),

@@ -9,6 +9,7 @@ class States {
       totalFalse = 0;
   String currentOperator = "X";
   bool isGameRunning = false;
+  int correctAnsIndex = -1;
 
   var results = [
     12,
@@ -69,6 +70,11 @@ class States {
 
   setGameRunning(bool b) {
     isGameRunning = b;
+    states.notify();
+  }
+
+  setCorrectAnsIndex(int num) {
+    correctAnsIndex = num;
     states.notify();
   }
 
