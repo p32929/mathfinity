@@ -1,7 +1,10 @@
+import 'package:infmath/others/constants.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
 class States {
-  int minNumber = 1, maxNumber = 99, maxTimer = 30;
+  int minNumber = Constants.minNumber,
+      maxNumber = Constants.maxNumber,
+      maxTimer = 90;
   int firstNumber = 12,
       secondNumber = 34,
       currentTimer = 0,

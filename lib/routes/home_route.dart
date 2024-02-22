@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:infmath/others/constants.dart';
 import 'package:infmath/others/states.dart';
 import 'package:infmath/others/utils.dart';
 import 'package:one_context/one_context.dart';
@@ -100,6 +101,7 @@ class HomeRoute extends StatelessWidget {
 
   onSettingsClicked() {
     OneContext.instance.showDialog(
+      barrierDismissible: false,
       builder: (p0) {
         return StateBuilder(
           observe: () => states,
@@ -121,7 +123,7 @@ class HomeRoute extends StatelessWidget {
                     textAlign: TextAlign.start,
                   ),
                   Slider(
-                    min: 1,
+                    min: Constants.minNumber.toDouble(),
                     max: states.state.maxNumber - 1,
                     value: states.state.minNumber.toDouble(),
                     onChanged: (value) {
@@ -138,7 +140,7 @@ class HomeRoute extends StatelessWidget {
                   ),
                   Slider(
                     min: states.state.minNumber + 1,
-                    max: 99,
+                    max: Constants.maxNumber.toDouble(),
                     value: states.state.maxNumber.toDouble(),
                     onChanged: (value) {
                       states.state.setMaxNumber(value.toInt());
@@ -153,8 +155,8 @@ class HomeRoute extends StatelessWidget {
                     textAlign: TextAlign.start,
                   ),
                   Slider(
-                    min: 90,
-                    max: 999,
+                    min: Constants.minTimer.toDouble(),
+                    max: Constants.maxTimer.toDouble(),
                     value: states.state.maxTimer.toDouble(),
                     onChanged: (value) {
                       states.state.setTimer(value.toInt());
@@ -165,15 +167,7 @@ class HomeRoute extends StatelessWidget {
               actions: [
                 TextButton(
                     onPressed: () {
-                      OneContext.instance.popAllDialogs();
-                    },
-                    child: Text(
-                      "Cancel",
-                      style: GoogleFonts.varelaRound(),
-                    )),
-                TextButton(
-                    onPressed: () {
-                      OneContext.instance.popAllDialogs();
+                      Navigator.pop(OneContext.instance.context!);
                     },
                     child: Text(
                       "OK",
@@ -207,6 +201,7 @@ class HomeRoute extends StatelessWidget {
     print("accuracy: $accuracy");
 
     OneContext.instance.showDialog(
+      barrierDismissible: false,
       builder: (p0) {
         return AlertDialog(
           title: Text(
@@ -218,7 +213,8 @@ class HomeRoute extends StatelessWidget {
                 onPressed: () {
                   states.state.setTotalTrue(0);
                   states.state.setTotalFalse(0);
-                  OneContext.instance.popAllDialogs();
+                  // OneContext.instance.popAllDialogs();
+                  Navigator.pop(OneContext.instance.context!);
                 },
                 child: Text(
                   "OK",
