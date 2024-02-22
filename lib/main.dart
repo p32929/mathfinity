@@ -7,7 +7,6 @@ import 'package:dynamic_color/dynamic_color.dart';
 
 void main() {
   runApp(const MyApp());
-  // Helpers.setSavedData();
 }
 
 @immutable
