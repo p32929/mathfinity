@@ -153,7 +153,7 @@ class HomeRoute extends StatelessWidget {
                     textAlign: TextAlign.start,
                   ),
                   Slider(
-                    min: 1,
+                    min: 90,
                     max: 999,
                     value: states.state.maxTimer.toDouble(),
                     onChanged: (value) {
