@@ -191,6 +191,61 @@ class HomeRoute extends StatelessWidget {
     states.state.setGameRunning(!states.state.isGameRunning);
     states.state.setCurrentTimer(0);
     gameTimer?.cancel();
+
+    showResultDialog();
+  }
+
+  showResultDialog() {
+    OneContext.instance.showDialog(
+      builder: (p0) {
+        return AlertDialog(
+          title: Text(
+            "Game over",
+            style: GoogleFonts.varelaRound(),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  OneContext.instance.popAllDialogs();
+                },
+                child: Text(
+                  "OK",
+                  style: GoogleFonts.varelaRound(),
+                )),
+          ],
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "0 Correct Answers",
+                style: GoogleFonts.varelaRound(
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                "0 Correct Answers",
+                style: GoogleFonts.varelaRound(
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                "0 Correct Answers",
+                style: GoogleFonts.varelaRound(
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                "0 Correct Answers",
+                style: GoogleFonts.varelaRound(
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   int getMathResult(int num1, int num2, String operator) {
