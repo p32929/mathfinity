@@ -88,7 +88,7 @@ class MyApp extends StatelessWidget {
             }
 
             return MaterialApp(
-              title: 'InfiMath',
+              title: 'MathFinity',
               theme: ThemeData(
                 colorScheme: lightColorScheme,
                 extensions: [lightCustomColors],
