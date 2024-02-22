@@ -1,7 +1,3 @@
-# Will update the readme later
-
-...
-
 # mathfinity
 
 Play with math infinitely
