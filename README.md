@@ -1,7 +1,19 @@
+# Will update the readme later
+...
+
 # mathfinity
 Play with math infinitely
 
 # Screenrecord
+...
+
+# Screenshot
+...
+
+# Todos
+* Upload to Google Play / FDroid
+* Auto deploy to Google Play
+* ...
 
 # License
 ```
@@ -28,3 +40,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ```
+
