@@ -2,7 +2,7 @@
 
 Play with math infinitely
 
-# Screenrecord
+# Screen Record
 
 https://github.com/p32929/mathfinity/assets/6418354/33594f4e-2b5d-4105-8f23-7f8bdc1a7286
 
