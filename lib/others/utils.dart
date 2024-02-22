@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:infmath/others/states.dart';
+import 'package:mathfinity/others/states.dart';
 import 'package:prefs/prefs.dart';
 
 const String MIN_NUMBER_SP = "MIN_NUMBER_SP";

@@ -1,4 +1,4 @@
-import 'package:infmath/others/constants.dart';
+import 'package:mathfinity/others/constants.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
 class States {

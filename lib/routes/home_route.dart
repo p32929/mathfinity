@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:infmath/others/constants.dart';
-import 'package:infmath/others/states.dart';
-import 'package:infmath/others/utils.dart';
+import 'package:mathfinity/others/constants.dart';
+import 'package:mathfinity/others/states.dart';
+import 'package:mathfinity/others/utils.dart';
 import 'package:one_context/one_context.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:google_fonts/google_fonts.dart';
