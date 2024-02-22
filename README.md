@@ -1,21 +1,33 @@
 # Will update the readme later
+
 ...
 
 # mathfinity
+
 Play with math infinitely
 
 # Screenrecord
-...
+
+https://github.com/p32929/mathfinity/assets/6418354/33594f4e-2b5d-4105-8f23-7f8bdc1a7286
 
 # Screenshot
-...
+
+<img src="https://github.com/p32929/mathfinity/assets/6418354/ead028a1-7b4b-4450-92cb-9c0be01d9560" alt="Screenshot_20240222-195902" width="200">
+
+<img src="https://github.com/p32929/mathfinity/assets/6418354/ead028a1-7b4b-4450-92cb-9c0be01d9560" alt="Screenshot_20240222-195902" width="200">
+
+<img src="https://github.com/p32929/mathfinity/assets/6418354/bd6ac25f-cdd4-4553-b708-9e5e83614fee" alt="Screenshot_20240222-195902" width="200">
+
+<img src="https://github.com/p32929/mathfinity/assets/6418354/a0af677d-9909-4881-af3b-99605d300314" alt="Screenshot_20240222-195902" width="200">
 
 # Todos
-* Upload to Google Play / FDroid
-* Auto deploy to Google Play
-* ...
+
+- Upload to Google Play / FDroid
+- Auto deploy to Google Play
+- ...
 
 # License
+
 ```
 MIT License
 
@@ -40,4 +52,3 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ```
-
