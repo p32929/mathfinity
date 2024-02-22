@@ -130,8 +130,8 @@ class HomeRoute extends StatelessWidget {
               "20 x 13",
               style: TextStyle(
                 fontSize: 36,
-                color:
-                    Theme.of(OneContext.instance.context!).colorScheme.primary,
+                // color:
+                //     Theme.of(OneContext.instance.context!).colorScheme.primary,
                 fontWeight: FontWeight.w500,
                 letterSpacing: 12,
               ),
