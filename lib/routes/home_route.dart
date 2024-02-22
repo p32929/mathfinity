@@ -159,20 +159,22 @@ class HomeRoute extends StatelessWidget {
                     max: Constants.maxTimer.toDouble(),
                     value: states.state.maxTimer.toDouble(),
                     onChanged: (value) {
-                      states.state.setTimer(value.toInt());
+                      states.state.setMaxTimer(value.toInt());
                     },
                   ),
                 ],
               ),
               actions: [
                 TextButton(
-                    onPressed: () {
-                      Navigator.pop(OneContext.instance.context!);
-                    },
-                    child: Text(
-                      "OK",
-                      style: GoogleFonts.varelaRound(),
-                    )),
+                  onPressed: () {
+                    Utils.saveSettings();
+                    Navigator.pop(OneContext.instance.context!);
+                  },
+                  child: Text(
+                    "OK",
+                    style: GoogleFonts.varelaRound(),
+                  ),
+                ),
               ],
             );
           },

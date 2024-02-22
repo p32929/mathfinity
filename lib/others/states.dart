@@ -36,7 +36,7 @@ class States {
     states.notify();
   }
 
-  setTimer(int num) {
+  setMaxTimer(int num) {
     maxTimer = num;
     states.notify();
   }
