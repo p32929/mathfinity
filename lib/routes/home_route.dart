@@ -75,12 +75,14 @@ class HomeRoute extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          if (states.state.correctAnsIndex == index) {
-            states.state.setTotalTrue(states.state.totalTrue + 1);
-          } else {
-            states.state.setTotalFalse(states.state.totalFalse + 1);
+          if (states.state.isGameRunning) {
+            if (states.state.correctAnsIndex == index) {
+              states.state.setTotalTrue(states.state.totalTrue + 1);
+            } else {
+              states.state.setTotalFalse(states.state.totalFalse + 1);
+            }
+            setNewEquationAndResults();
           }
-          setNewEquationAndResults();
         },
         child: Padding(
           padding:
