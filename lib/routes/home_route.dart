@@ -8,7 +8,7 @@ class HomeRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double numberButtonsRowPadding = 12;
+    const double numberButtonsRowPadding = 8;
     const double numberButtonSizePadding = 48;
 
     getInfoWidgets(
@@ -53,6 +53,15 @@ class HomeRoute extends StatelessWidget {
     getNumberWidget({String text = "0"}) {
       return Expanded(
         child: ElevatedButton(
+          style: ButtonStyle(
+            overlayColor: MaterialStateProperty.resolveWith(
+              (states) {
+                return states.contains(MaterialState.pressed)
+                    ? Colors.red
+                    : null;
+              },
+            ),
+          ),
           onPressed: () {},
           child: Padding(
             padding:
@@ -116,16 +125,25 @@ class HomeRoute extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(padding: const EdgeInsets.all(16)),
+            Padding(padding: const EdgeInsets.all(8)),
+            Text(
+              "20 x 13",
+              style: TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 4,
+              ),
+            ),
+            Padding(padding: const EdgeInsets.all(8)),
             Padding(
               padding: const EdgeInsets.all(numberButtonsRowPadding),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  getNumberWidget(text: "11"),
+                  getNumberWidget(text: "999"),
                   Padding(
                       padding: const EdgeInsets.all(numberButtonsRowPadding)),
-                  getNumberWidget(text: "22"),
+                  getNumberWidget(text: "999"),
                 ],
               ),
             ),
@@ -134,10 +152,10 @@ class HomeRoute extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  getNumberWidget(text: "33"),
+                  getNumberWidget(text: "999"),
                   Padding(
                       padding: const EdgeInsets.all(numberButtonsRowPadding)),
-                  getNumberWidget(text: "44"),
+                  getNumberWidget(text: "999"),
                 ],
               ),
             ),
@@ -148,6 +166,15 @@ class HomeRoute extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 36.0),
                     child: ElevatedButton(
+                      style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.resolveWith(
+                          (states) {
+                            return states.contains(MaterialState.pressed)
+                                ? Colors.red
+                                : null;
+                          },
+                        ),
+                      ),
                       onPressed: () {
                         //
                       },
