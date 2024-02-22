@@ -385,8 +385,8 @@ class HomeRoute extends StatelessWidget {
                 ),
                 getInfoWidgets(
                   icon: states.state.currentTimer % 2 == 0
-                      ? Icons.hourglass_top
-                      : Icons.hourglass_bottom,
+                      ? Icons.hourglass_bottom
+                      : Icons.hourglass_top,
                   color:
                       Theme.of(OneContext.instance.context!).colorScheme.error,
                   text: states.state.currentTimer.toString(),
