@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:infmath/others/states.dart';
+import 'package:one_context/one_context.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
 class HomeRoute extends StatelessWidget {
@@ -7,10 +8,11 @@ class HomeRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double numberButtonsPadding = 12;
-    const double numberButtonsSize = 48;
+    const double numberButtonsRowPadding = 12;
+    const double numberButtonSizePadding = 48;
 
-    getInfoWidgets({String text = "0", IconData icon = Icons.menu}) {
+    getInfoWidgets(
+        {String text = "0", IconData icon = Icons.menu, Color? color}) {
       const dividerText = '-:-';
       return Expanded(
         child: Padding(
@@ -18,30 +20,48 @@ class HomeRoute extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(dividerText),
-              Icon(icon),
+              Text(
+                dividerText,
+                style: TextStyle(
+                  color: Colors.blueGrey,
+                ),
+              ),
+              Icon(
+                icon,
+                size: 32,
+                color: color,
+              ),
               Text(
                 text,
                 style: TextStyle(
                   fontSize: 24,
+                  color: color,
                 ),
               ),
-              Text(dividerText),
+              Text(
+                dividerText,
+                style: TextStyle(
+                  color: Colors.blueGrey,
+                ),
+              ),
             ],
           ),
         ),
       );
     }
 
-    getNumberWidget() {
-      return ElevatedButton(
-        onPressed: () {},
-        child: Padding(
-          padding: const EdgeInsets.all(numberButtonsSize),
-          child: Text(
-            "0",
-            style: TextStyle(
-              fontSize: numberButtonsSize,
+    getNumberWidget({String text = "0"}) {
+      return Expanded(
+        child: ElevatedButton(
+          onPressed: () {},
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: numberButtonSizePadding),
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: numberButtonSizePadding,
+              ),
             ),
           ),
         ),
@@ -52,9 +72,9 @@ class HomeRoute extends StatelessWidget {
       observe: () => states,
       builder: (context, _) => Scaffold(
         appBar: AppBar(
-          title: Text(
-            "InfiMath",
-          ),
+          // title: Text(
+          //   "InfiMath",
+          // ),
           actions: [
             IconButton(
               onPressed: () {
@@ -62,6 +82,8 @@ class HomeRoute extends StatelessWidget {
               },
               icon: Icon(
                 Icons.settings,
+                color:
+                    Theme.of(OneContext.instance.context!).colorScheme.primary,
               ),
             ),
           ],
@@ -72,31 +94,46 @@ class HomeRoute extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
-                getInfoWidgets(),
-                getInfoWidgets(),
-                getInfoWidgets(),
+                getInfoWidgets(
+                  icon: Icons.check_circle,
+                  color: Theme.of(OneContext.instance.context!)
+                      .colorScheme
+                      .primary,
+                ),
+                getInfoWidgets(
+                  icon: Icons.hourglass_top,
+                  color:
+                      Theme.of(OneContext.instance.context!).colorScheme.error,
+                ),
+                getInfoWidgets(
+                  icon: Icons.cancel,
+                  color:
+                      Theme.of(OneContext.instance.context!).colorScheme.error,
+                ),
               ],
             ),
             Padding(padding: const EdgeInsets.all(16)),
             Padding(
-              padding: const EdgeInsets.all(numberButtonsPadding),
+              padding: const EdgeInsets.all(numberButtonsRowPadding),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  getNumberWidget(),
-                  Padding(padding: const EdgeInsets.all(numberButtonsPadding)),
-                  getNumberWidget(),
+                  getNumberWidget(text: "11"),
+                  Padding(
+                      padding: const EdgeInsets.all(numberButtonsRowPadding)),
+                  getNumberWidget(text: "22"),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(numberButtonsPadding),
+              padding: const EdgeInsets.all(numberButtonsRowPadding),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  getNumberWidget(),
-                  Padding(padding: const EdgeInsets.all(numberButtonsPadding)),
-                  getNumberWidget(),
+                  getNumberWidget(text: "33"),
+                  Padding(
+                      padding: const EdgeInsets.all(numberButtonsRowPadding)),
+                  getNumberWidget(text: "44"),
                 ],
               ),
             ),
