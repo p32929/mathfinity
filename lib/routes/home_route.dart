@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:infmath/others/states.dart';
 import 'package:one_context/one_context.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+Timer? gameTimer;
 
 class HomeRoute extends StatelessWidget {
   const HomeRoute({super.key});
@@ -167,6 +171,25 @@ class HomeRoute extends StatelessWidget {
       );
     }
 
+    startGame() {
+      if (states.state.isGameRunning) {
+        states.state.setGameRunning(!states.state.isGameRunning);
+        states.state.setCurrentTimer(0);
+        gameTimer?.cancel();
+        //
+      } else {
+        states.state.setGameRunning(!states.state.isGameRunning);
+        gameTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+          int timeLeft = states.state.timer - timer.tick;
+          states.state.setCurrentTimer(timeLeft);
+          if (timeLeft <= 0) {
+            timer.cancel();
+            states.state.setGameRunning(!states.state.isGameRunning);
+          }
+        });
+      }
+    }
+
     return StateBuilder(
       observe: () => states,
       builder: (context, _) => Scaffold(
@@ -203,22 +226,25 @@ class HomeRoute extends StatelessWidget {
                   color: Theme.of(OneContext.instance.context!)
                       .colorScheme
                       .primary,
+                  text: states.state.totalTrue.toString(),
                 ),
                 getInfoWidgets(
                   icon: Icons.hourglass_top,
                   color:
                       Theme.of(OneContext.instance.context!).colorScheme.error,
+                  text: states.state.currentTimer.toString(),
                 ),
                 getInfoWidgets(
                   icon: Icons.cancel,
                   color:
                       Theme.of(OneContext.instance.context!).colorScheme.error,
+                  text: states.state.totalFalse.toString(),
                 ),
               ],
             ),
             Padding(padding: const EdgeInsets.all(rowPaddings)),
             Text(
-              "${states.state.firstNumber} x ${states.state.secondNumber}",
+              "${states.state.firstNumber} ${states.state.currentOperator} ${states.state.secondNumber}",
               style: GoogleFonts.varelaRound(
                 fontSize: 36,
                 // color:
@@ -265,20 +291,32 @@ class HomeRoute extends StatelessWidget {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         overlayColor: MaterialStateProperty.resolveWith(
-                          (states) {
-                            return states.contains(MaterialState.pressed)
-                                ? Colors.red
+                          (buttonState) {
+                            getColor() {
+                              if (states.state.isGameRunning) {
+                                return Theme.of(OneContext.instance.context!)
+                                    .colorScheme
+                                    .error;
+                              } else {
+                                return Theme.of(OneContext.instance.context!)
+                                    .colorScheme
+                                    .primary;
+                              }
+                            }
+
+                            return buttonState.contains(MaterialState.pressed)
+                                ? getColor()
                                 : null;
                           },
                         ),
                       ),
                       onPressed: () {
-                        //
+                        startGame();
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Text(
-                          "START",
+                          states.state.isGameRunning ? "STOP" : "START",
                           style: GoogleFonts.varelaRound(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
