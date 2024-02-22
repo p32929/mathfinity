@@ -196,6 +196,16 @@ class HomeRoute extends StatelessWidget {
   }
 
   showResultDialog() {
+    double accuracy;
+    if (states.state.totalFalse != 0) {
+      accuracy = (states.state.totalTrue /
+              (states.state.totalTrue + states.state.totalFalse)) *
+          100;
+    } else {
+      accuracy = 100.0; // If totalFalse is 0, accuracy is 100%
+    }
+    print("accuracy: $accuracy");
+
     OneContext.instance.showDialog(
       builder: (p0) {
         return AlertDialog(
@@ -206,6 +216,8 @@ class HomeRoute extends StatelessWidget {
           actions: [
             TextButton(
                 onPressed: () {
+                  states.state.setTotalTrue(0);
+                  states.state.setTotalFalse(0);
                   OneContext.instance.popAllDialogs();
                 },
                 child: Text(
@@ -218,25 +230,19 @@ class HomeRoute extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "0 Correct Answers",
+                "${states.state.totalTrue} Correct Answers",
                 style: GoogleFonts.varelaRound(
                   fontSize: 16,
                 ),
               ),
               Text(
-                "0 Correct Answers",
+                "${states.state.totalFalse} Wrong Answers",
                 style: GoogleFonts.varelaRound(
                   fontSize: 16,
                 ),
               ),
               Text(
-                "0 Correct Answers",
-                style: GoogleFonts.varelaRound(
-                  fontSize: 16,
-                ),
-              ),
-              Text(
-                "0 Correct Answers",
+                "Accuracy ${accuracy.toStringAsFixed(2)}%",
                 style: GoogleFonts.varelaRound(
                   fontSize: 16,
                 ),
