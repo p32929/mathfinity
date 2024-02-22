@@ -40,6 +40,7 @@ dependencies:
   one_context: ^2.1.0
   dynamic_color: ^1.6.9
   google_fonts: ^6.1.0
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

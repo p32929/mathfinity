@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mathfinity/others/constants.dart';
 import 'package:mathfinity/others/states.dart';
@@ -88,11 +89,10 @@ class HomeRoute extends StatelessWidget {
         child: Padding(
           padding:
               const EdgeInsets.symmetric(vertical: numberButtonSizePadding),
-          child: Text(
+          child: AutoSizeText(
             states.state.results[index].toString(),
-            style: GoogleFonts.varelaRound(
-              fontSize: numberButtonSizePadding,
-            ),
+            style: GoogleFonts.varelaRound(),
+            minFontSize: 36,
           ),
         ),
       ),
@@ -276,8 +276,8 @@ class HomeRoute extends StatelessWidget {
     int num1 = numbersArray[0];
     int num2 = numbersArray[1];
 
-    // int num1 = 1;
-    // int num2 = 2;
+    // int num1 = 98;
+    // int num2 = 99;
 
     if (num2 > num1) {
       int temp = num1;
