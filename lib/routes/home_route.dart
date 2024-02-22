@@ -72,9 +72,13 @@ class HomeRoute extends StatelessWidget {
       observe: () => states,
       builder: (context, _) => Scaffold(
         appBar: AppBar(
-          // title: Text(
-          //   "InfiMath",
-          // ),
+          title: Text(
+            "MathFinity",
+            style: TextStyle(
+              color: Theme.of(OneContext.instance.context!).colorScheme.primary,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
           actions: [
             IconButton(
               onPressed: () {
