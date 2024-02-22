@@ -44,3 +44,6 @@ app.*.map.json
 # 
 *.apk
 *.exe
+
+/node_modules
+yarn.lock
