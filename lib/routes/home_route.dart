@@ -350,9 +350,11 @@ class HomeRoute extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-                onSettingsClicked();
-              },
+              onPressed: states.state.isGameRunning
+                  ? null
+                  : () {
+                      onSettingsClicked();
+                    },
               icon: Icon(
                 Icons.settings,
                 color:
