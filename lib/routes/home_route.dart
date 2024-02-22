@@ -77,15 +77,17 @@ class HomeRoute extends StatelessWidget {
           ),
         ),
         onPressed: () async {
-          if (states.state.isGameRunning) {
+          if (states.state.isGameRunning && !states.state.isChangingEquation) {
             if (states.state.correctAnsIndex == index) {
               states.state.setTotalTrue(states.state.totalTrue + 1);
             } else {
               states.state.setTotalFalse(states.state.totalFalse + 1);
             }
 
+            states.state.setChangingEquation(true);
             await Future.delayed(Duration(milliseconds: 300));
             setNewEquationAndResults();
+            states.state.setChangingEquation(false);
           }
         },
         child: Padding(

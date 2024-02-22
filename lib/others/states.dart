@@ -5,14 +5,18 @@ class States {
   int minNumber = Constants.minNumber,
       maxNumber = Constants.maxNumber,
       maxTimer = 90;
+
   int firstNumber = 12,
       secondNumber = 34,
       currentTimer = 0,
       totalTrue = 0,
       totalFalse = 0;
+
   String currentOperator = "X";
-  bool isGameRunning = false;
   int correctAnsIndex = -1;
+
+  bool isGameRunning = false;
+  bool isChangingEquation = false;
 
   var results = [
     12,
@@ -73,6 +77,11 @@ class States {
 
   setGameRunning(bool b) {
     isGameRunning = b;
+    states.notify();
+  }
+
+  setChangingEquation(bool b) {
+    isChangingEquation = b;
     states.notify();
   }
 
