@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:infmath/others/states.dart';
+import 'package:infmath/others/utils.dart';
 import 'package:one_context/one_context.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -177,18 +178,42 @@ class HomeRoute extends StatelessWidget {
       gameTimer?.cancel();
     }
 
+    setEquationAndResults() {
+      var array = Utils.generateNumberArray(
+        states.state.minNumber,
+        states.state.maxNumber,
+        shuffle: true,
+      );
+      states.state.setFirstNumber(array[0]);
+      states.state.setSecondNumber(array[1]);
+
+      var operators = ["+", "-", "X", "/"];
+      var operatorsRand = Utils.generateNumberArray(
+        0,
+        operators.length,
+        shuffle: true,
+      );
+      states.state.setCurrentOperator(operators[operatorsRand[0]]);
+    }
+
+    startGame() {
+      states.state.setGameRunning(!states.state.isGameRunning);
+      setEquationAndResults();
+      gameTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        int timeLeft = states.state.timer - timer.tick;
+        states.state.setCurrentTimer(timeLeft);
+
+        if (timeLeft <= 0) {
+          stopGame();
+        }
+      });
+    }
+
     onStartStopClicked() {
       if (states.state.isGameRunning) {
         stopGame();
       } else {
-        states.state.setGameRunning(!states.state.isGameRunning);
-        gameTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-          int timeLeft = states.state.timer - timer.tick;
-          states.state.setCurrentTimer(timeLeft);
-          if (timeLeft <= 0) {
-            stopGame();
-          }
-        });
+        startGame();
       }
     }
 
@@ -313,7 +338,8 @@ class HomeRoute extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        onStartStopClicked();
+                        // onStartStopClicked();
+                        setEquationAndResults();
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
