@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:infmath/others/states.dart';
 import 'package:one_context/one_context.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeRoute extends StatelessWidget {
   const HomeRoute({super.key});
@@ -22,7 +23,7 @@ class HomeRoute extends StatelessWidget {
             children: [
               Text(
                 dividerText,
-                style: TextStyle(
+                style: GoogleFonts.varelaRound(
                   color: Colors.blueGrey,
                 ),
               ),
@@ -33,7 +34,7 @@ class HomeRoute extends StatelessWidget {
               ),
               Text(
                 text,
-                style: TextStyle(
+                style: GoogleFonts.varelaRound(
                   fontSize: 24,
                   color: color,
                 ),
@@ -68,12 +69,101 @@ class HomeRoute extends StatelessWidget {
                 const EdgeInsets.symmetric(vertical: numberButtonSizePadding),
             child: Text(
               text,
-              style: TextStyle(
+              style: GoogleFonts.varelaRound(
                 fontSize: numberButtonSizePadding,
               ),
             ),
           ),
         ),
+      );
+    }
+
+    onSettingsClicked() {
+      OneContext.instance.showDialog(
+        builder: (p0) {
+          return StateBuilder(
+            observe: () => states,
+            builder: (context, _) {
+              return AlertDialog(
+                title: Text(
+                  "Settings",
+                  style: GoogleFonts.varelaRound(),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Smallest number: ${states.state.minNumber}",
+                      style: GoogleFonts.varelaRound(
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                    Slider(
+                      min: 1,
+                      max: states.state.maxNumber - 1,
+                      value: states.state.minNumber.toDouble(),
+                      onChanged: (value) {
+                        states.state.setMinNumber(value.toInt());
+                      },
+                    ),
+                    Padding(padding: const EdgeInsets.all(rowPaddings)),
+                    Text(
+                      "Biggest number: ${states.state.maxNumber}",
+                      style: GoogleFonts.varelaRound(
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                    Slider(
+                      min: states.state.minNumber + 1,
+                      max: 999,
+                      value: states.state.maxNumber.toDouble(),
+                      onChanged: (value) {
+                        states.state.setMaxNumber(value.toInt());
+                      },
+                    ),
+                    Padding(padding: const EdgeInsets.all(rowPaddings)),
+                    Text(
+                      "Timer: ${states.state.timer}",
+                      style: GoogleFonts.varelaRound(
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                    Slider(
+                      min: 1,
+                      max: 120,
+                      value: states.state.timer.toDouble(),
+                      onChanged: (value) {
+                        states.state.setTimer(value.toInt());
+                      },
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        OneContext.instance.popAllDialogs();
+                      },
+                      child: Text(
+                        "Cancel",
+                        style: GoogleFonts.varelaRound(),
+                      )),
+                  TextButton(
+                      onPressed: () {
+                        OneContext.instance.popAllDialogs();
+                      },
+                      child: Text(
+                        "OK",
+                        style: GoogleFonts.varelaRound(),
+                      )),
+                ],
+              );
+            },
+          );
+        },
       );
     }
 
@@ -83,15 +173,16 @@ class HomeRoute extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             "MathFinity",
-            style: TextStyle(
+            style: GoogleFonts.varelaRound(
               color: Theme.of(OneContext.instance.context!).colorScheme.primary,
-              fontStyle: FontStyle.italic,
+              // fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.bold,
             ),
           ),
           actions: [
             IconButton(
               onPressed: () {
-                //
+                onSettingsClicked();
               },
               icon: Icon(
                 Icons.settings,
@@ -127,8 +218,8 @@ class HomeRoute extends StatelessWidget {
             ),
             Padding(padding: const EdgeInsets.all(rowPaddings)),
             Text(
-              "20 x 13",
-              style: TextStyle(
+              "${states.state.firstNumber} x ${states.state.secondNumber}",
+              style: GoogleFonts.varelaRound(
                 fontSize: 36,
                 // color:
                 //     Theme.of(OneContext.instance.context!).colorScheme.primary,
@@ -182,7 +273,7 @@ class HomeRoute extends StatelessWidget {
                         padding: const EdgeInsets.all(16.0),
                         child: Text(
                           "START",
-                          style: TextStyle(
+                          style: GoogleFonts.varelaRound(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
