@@ -8,7 +8,7 @@ class HomeRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double numberButtonsRowPadding = 8;
+    const double rowPaddings = 8;
     const double numberButtonSizePadding = 48;
 
     getInfoWidgets(
@@ -16,7 +16,7 @@ class HomeRoute extends StatelessWidget {
       const dividerText = '-:-';
       return Expanded(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(rowPaddings),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -125,42 +125,41 @@ class HomeRoute extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(padding: const EdgeInsets.all(8)),
+            Padding(padding: const EdgeInsets.all(rowPaddings)),
             Text(
               "20 x 13",
               style: TextStyle(
                 fontSize: 36,
-                color: Theme.of(OneContext.instance.context!).primaryColor,
+                color:
+                    Theme.of(OneContext.instance.context!).colorScheme.primary,
                 fontWeight: FontWeight.w500,
                 letterSpacing: 12,
               ),
             ),
-            Padding(padding: const EdgeInsets.all(8)),
+            Padding(padding: const EdgeInsets.all(rowPaddings)),
             Padding(
-              padding: const EdgeInsets.all(numberButtonsRowPadding),
+              padding: const EdgeInsets.all(rowPaddings),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   getNumberWidget(text: "999"),
-                  Padding(
-                      padding: const EdgeInsets.all(numberButtonsRowPadding)),
+                  Padding(padding: const EdgeInsets.all(rowPaddings)),
                   getNumberWidget(text: "999"),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(numberButtonsRowPadding),
+              padding: const EdgeInsets.all(rowPaddings),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   getNumberWidget(text: "999"),
-                  Padding(
-                      padding: const EdgeInsets.all(numberButtonsRowPadding)),
+                  Padding(padding: const EdgeInsets.all(rowPaddings)),
                   getNumberWidget(text: "999"),
                 ],
               ),
             ),
-            Padding(padding: const EdgeInsets.all(12)),
+            Padding(padding: const EdgeInsets.all(rowPaddings)),
             Row(
               children: [
                 Expanded(
