@@ -145,7 +145,7 @@ class HomeRoute extends StatelessWidget {
                     ),
                     Padding(padding: const EdgeInsets.all(rowPaddings)),
                     Text(
-                      "Timer: ${states.state.timer}",
+                      "Timer: ${states.state.maxTimer}",
                       style: GoogleFonts.varelaRound(
                         fontSize: 16,
                       ),
@@ -153,8 +153,8 @@ class HomeRoute extends StatelessWidget {
                     ),
                     Slider(
                       min: 1,
-                      max: 120,
-                      value: states.state.timer.toDouble(),
+                      max: 999,
+                      value: states.state.maxTimer.toDouble(),
                       onChanged: (value) {
                         states.state.setTimer(value.toInt());
                       },
@@ -260,7 +260,7 @@ class HomeRoute extends StatelessWidget {
       states.state.setGameRunning(!states.state.isGameRunning);
       setEquationAndResults();
       gameTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-        int timeLeft = states.state.timer - timer.tick;
+        int timeLeft = states.state.maxTimer - timer.tick;
         states.state.setCurrentTimer(timeLeft);
 
         if (timeLeft <= 0) {
@@ -394,8 +394,8 @@ class HomeRoute extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        // onStartStopClicked();
-                        setEquationAndResults();
+                        onStartStopClicked();
+                        // setEquationAndResults();
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),

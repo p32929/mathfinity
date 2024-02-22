@@ -1,7 +1,7 @@
 import 'package:states_rebuilder/states_rebuilder.dart';
 
 class States {
-  int minNumber = 1, maxNumber = 99, timer = 30;
+  int minNumber = 1, maxNumber = 99, maxTimer = 30;
   int firstNumber = 12,
       secondNumber = 34,
       currentTimer = 0,
@@ -34,7 +34,7 @@ class States {
   }
 
   setTimer(int num) {
-    timer = num;
+    maxTimer = num;
     states.notify();
   }
 
