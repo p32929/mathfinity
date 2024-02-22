@@ -310,7 +310,11 @@ class HomeRoute extends StatelessWidget {
       var mr = getMathResult(num1, num2, op0);
       if (results[i] == mr) {
         states.state.setCorrectAnsIndex(i);
-        break;
+      } else {
+        if (results[i] < 20) {
+          var newNum = Utils.generateNumberArray(21, 100, shuffle: true)[0];
+          results[i] = newNum;
+        }
       }
     }
     states.state.setResults(results);

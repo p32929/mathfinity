@@ -42,7 +42,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
 }
 
 // Fictitious brand color.
-const _brandBlue = Colors.green;
+const _brandBlue = Colors.blue;
 
 CustomColors lightCustomColors = const CustomColors(danger: Color(0xFFE53935));
 CustomColors darkCustomColors = const CustomColors(danger: Color(0xFFEF9A9A));
