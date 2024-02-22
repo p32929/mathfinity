@@ -6,9 +6,10 @@ import 'package:one_context/one_context.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Utils.getSavedSettings();
   runApp(const MyApp());
-  Utils.getSavedSettings();
 }
 
 @immutable
