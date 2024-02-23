@@ -171,6 +171,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_screen_scaler:
+    dependency: "direct main"
+    description:
+      name: flutter_screen_scaler
+      sha256: a441f28a83970c45bf49059bb14331a7d65d626a486be14524a8b2c7e0dfcfc9
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -285,14 +293,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  open_url:
-    dependency: "direct main"
-    description:
-      name: open_url
-      sha256: "24425e000d678ca175fe03a72edabb292d7053c5161de6386a014cc917504778"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   path:
     dependency: transitive
     description:

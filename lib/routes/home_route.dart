@@ -6,24 +6,20 @@ import 'package:mathfinity/others/constants.dart';
 import 'package:mathfinity/others/states.dart';
 import 'package:mathfinity/others/utils.dart';
 import 'package:one_context/one_context.dart';
-import 'package:open_url/open_url.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Timer? gameTimer;
 
-const double rowPaddings = 8;
-const double numberButtonSizePadding = 48;
-
 class HomeRoute extends StatelessWidget {
   const HomeRoute({super.key});
 
-  getInfoWidgets(
+  getInfoWidgets(double rowPaddings,
       {String text = "0", IconData icon = Icons.menu, Color? color}) {
     const dividerText = '-:-';
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.all(rowPaddings),
+        padding: EdgeInsets.all(rowPaddings),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -65,7 +61,7 @@ class HomeRoute extends StatelessWidget {
     }
   }
 
-  getNumberWidget({int index = 0}) {
+  getNumberWidget(double numberButtonSizePadding, {int index = 0}) {
     return Expanded(
       child: ElevatedButton(
         style: ButtonStyle(
@@ -91,8 +87,7 @@ class HomeRoute extends StatelessWidget {
           }
         },
         child: Padding(
-          padding:
-              const EdgeInsets.symmetric(vertical: numberButtonSizePadding),
+          padding: EdgeInsets.symmetric(vertical: numberButtonSizePadding),
           child: AutoSizeText(
             states.state.results[index].toString(),
             style: GoogleFonts.varelaRound(),
@@ -103,7 +98,7 @@ class HomeRoute extends StatelessWidget {
     );
   }
 
-  onSettingsClicked() {
+  onSettingsClicked(double rowPaddings) {
     OneContext.instance.showDialog(
       barrierDismissible: false,
       builder: (p0) {
@@ -134,7 +129,7 @@ class HomeRoute extends StatelessWidget {
                       states.state.setMinNumber(value.toInt());
                     },
                   ),
-                  Padding(padding: const EdgeInsets.all(rowPaddings)),
+                  Padding(padding: EdgeInsets.all(rowPaddings)),
                   Text(
                     "Biggest number: ${states.state.maxNumber}",
                     style: GoogleFonts.varelaRound(
@@ -150,7 +145,7 @@ class HomeRoute extends StatelessWidget {
                       states.state.setMaxNumber(value.toInt());
                     },
                   ),
-                  Padding(padding: const EdgeInsets.all(rowPaddings)),
+                  Padding(padding: EdgeInsets.all(rowPaddings)),
                   Text(
                     "Timer: ${states.state.maxTimer}",
                     style: GoogleFonts.varelaRound(
@@ -345,6 +340,11 @@ class HomeRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    double screenHeight = size.height;
+    double rowPaddings = screenHeight / 100;
+    double numberButtonSizePadding = screenHeight / 19;
+
     return StateBuilder(
       observe: () => states,
       builder: (context, _) => Scaffold(
@@ -359,20 +359,10 @@ class HomeRoute extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-                openUrl('https://github.com/p32929/mathfinity');
-              },
-              icon: Icon(
-                Icons.code,
-                color:
-                    Theme.of(OneContext.instance.context!).colorScheme.primary,
-              ),
-            ),
-            IconButton(
               onPressed: states.state.isGameRunning
                   ? null
                   : () {
-                      onSettingsClicked();
+                      onSettingsClicked(rowPaddings);
                     },
               icon: Icon(
                 Icons.settings,
@@ -389,6 +379,7 @@ class HomeRoute extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 getInfoWidgets(
+                  rowPaddings,
                   icon: Icons.check_circle,
                   color: Theme.of(OneContext.instance.context!)
                       .colorScheme
@@ -396,6 +387,7 @@ class HomeRoute extends StatelessWidget {
                   text: states.state.totalTrue.toString(),
                 ),
                 getInfoWidgets(
+                  rowPaddings,
                   icon: states.state.currentTimer % 2 == 0
                       ? Icons.hourglass_bottom
                       : Icons.hourglass_top,
@@ -404,6 +396,7 @@ class HomeRoute extends StatelessWidget {
                   text: states.state.currentTimer.toString(),
                 ),
                 getInfoWidgets(
+                  rowPaddings,
                   icon: Icons.cancel,
                   color:
                       Theme.of(OneContext.instance.context!).colorScheme.error,
@@ -411,7 +404,7 @@ class HomeRoute extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(padding: const EdgeInsets.all(rowPaddings)),
+            Padding(padding: EdgeInsets.all(rowPaddings)),
             Text(
               "${states.state.firstNumber} ${states.state.currentOperator} ${states.state.secondNumber}",
               style: GoogleFonts.varelaRound(
@@ -422,36 +415,36 @@ class HomeRoute extends StatelessWidget {
                 letterSpacing: 12,
               ),
             ),
-            Padding(padding: const EdgeInsets.all(rowPaddings)),
+            Padding(padding: EdgeInsets.all(rowPaddings)),
             Padding(
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 vertical: rowPaddings,
                 horizontal: rowPaddings * 3,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  getNumberWidget(index: 0),
-                  Padding(padding: const EdgeInsets.all(rowPaddings)),
-                  getNumberWidget(index: 1),
+                  getNumberWidget(numberButtonSizePadding, index: 0),
+                  Padding(padding: EdgeInsets.all(rowPaddings)),
+                  getNumberWidget(numberButtonSizePadding, index: 1),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 vertical: rowPaddings,
                 horizontal: rowPaddings * 3,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  getNumberWidget(index: 2),
-                  Padding(padding: const EdgeInsets.all(rowPaddings)),
-                  getNumberWidget(index: 3),
+                  getNumberWidget(numberButtonSizePadding, index: 2),
+                  Padding(padding: EdgeInsets.all(rowPaddings)),
+                  getNumberWidget(numberButtonSizePadding, index: 3),
                 ],
               ),
             ),
-            Padding(padding: const EdgeInsets.all(rowPaddings)),
+            Padding(padding: EdgeInsets.all(rowPaddings)),
             Row(
               children: [
                 Expanded(
