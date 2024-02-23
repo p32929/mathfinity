@@ -78,14 +78,13 @@ class HomeRoute extends StatelessWidget {
         ),
         onPressed: () async {
           if (states.state.isGameRunning && !states.state.isChangingEquation) {
+            states.state.setChangingEquation(true);
             if (states.state.correctAnsIndex == index) {
               states.state.setTotalTrue(states.state.totalTrue + 1);
             } else {
               states.state.setTotalFalse(states.state.totalFalse + 1);
             }
-
-            states.state.setChangingEquation(true);
-            await Future.delayed(Duration(milliseconds: 300));
+            await Future.delayed(Duration(milliseconds: 250));
             setNewEquationAndResults();
             states.state.setChangingEquation(false);
           }
@@ -298,6 +297,11 @@ class HomeRoute extends StatelessWidget {
       int mod = num1 % num2;
       num1 -= mod;
     }
+
+    if (num1 == num2) {
+      return setNewEquationAndResults();
+    }
+
     states.state.setFirstNumber(num1);
     states.state.setSecondNumber(num2);
     var answer = getMathResult(num1, num2, op0);
