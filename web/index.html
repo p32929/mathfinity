@@ -23,7 +23,7 @@
     <!-- iOS meta tags & icons -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="duas" />
+    <meta name="apple-mobile-web-app-title" content="infmath" />
     <link rel="apple-touch-icon" href="icons/Icon-192.png" />
 
     <!-- Favicon -->
@@ -32,38 +32,34 @@
     <title>MathFinity</title>
     <link rel="manifest" href="manifest.json" />
 
+    <link rel="stylesheet" href="index.css" type="text/css" />
+
     <script>
       // The value below is injected by flutter build, do not touch.
-      var serviceWorkerVersion = null;
+      const serviceWorkerVersion = null;
     </script>
     <!-- This script adds the flutter initialization JS code -->
     <script src="flutter.js" defer></script>
   </head>
-
   <body>
-    <img src="spinner_animation.svg" />
-    <script src="main.dart.js" type="application/javascript"></script>
+    <div class="spinner">
+      <div class="spinner1"></div>
+      <div class="spinner2"></div>
+    </div>
+
     <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("flutter-first-frame", function () {
-          navigator.serviceWorker.register("flutter_service_worker.js");
-          navigator.serviceWorker.register("flutter_service_worker.js");
-        });
-      }
       window.addEventListener("load", function (ev) {
         // Download main.dart.js
-        _flutter.loader
-          .loadEntrypoint({
-            serviceWorker: {
-              serviceWorkerVersion: serviceWorkerVersion,
-            },
-          })
-          .then(function (engineInitializer) {
-            return engineInitializer.initializeEngine();
-          })
-          .then(function (appRunner) {
-            return appRunner.runApp();
-          });
+        _flutter.loader.loadEntrypoint({
+          serviceWorker: {
+            serviceWorkerVersion: serviceWorkerVersion,
+          },
+          onEntrypointLoaded: function (engineInitializer) {
+            engineInitializer.initializeEngine().then(function (appRunner) {
+              appRunner.runApp();
+            });
+          },
+        });
       });
     </script>
   </body>
