@@ -6,6 +6,7 @@ import 'package:mathfinity/others/constants.dart';
 import 'package:mathfinity/others/states.dart';
 import 'package:mathfinity/others/utils.dart';
 import 'package:one_context/one_context.dart';
+import 'package:open_url/open_url.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -357,6 +358,16 @@ class HomeRoute extends StatelessWidget {
             ),
           ),
           actions: [
+            IconButton(
+              onPressed: () {
+                openUrl('https://github.com/p32929/mathfinity');
+              },
+              icon: Icon(
+                Icons.code,
+                color:
+                    Theme.of(OneContext.instance.context!).colorScheme.primary,
+              ),
+            ),
             IconButton(
               onPressed: states.state.isGameRunning
                   ? null

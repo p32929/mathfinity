@@ -41,6 +41,7 @@ dependencies:
   dynamic_color: ^1.6.9
   google_fonts: ^6.1.0
   auto_size_text: ^3.0.0
+  open_url: ^2.0.1
 
 dev_dependencies:
   flutter_test:
