@@ -293,14 +293,14 @@ class HomeRoute extends StatelessWidget {
       int mod = num1 % num2;
       num1 -= mod;
     }
+    var answer = getMathResult(num1, num2, op0);
 
-    if (num1 == num2) {
+    if (num1 == num2 || answer < 3) {
       return setNewEquationAndResults();
     }
 
     states.state.setFirstNumber(num1);
     states.state.setSecondNumber(num2);
-    var answer = getMathResult(num1, num2, op0);
 
     List<int> results = Utils.generateNumbersCloseTo(answer);
     operators = Utils.shuffleArray<String>(operators);
@@ -366,8 +366,11 @@ class HomeRoute extends StatelessWidget {
                     },
               icon: Icon(
                 Icons.settings,
-                color:
-                    Theme.of(OneContext.instance.context!).colorScheme.primary,
+                color: states.state.isGameRunning
+                    ? Colors.grey
+                    : Theme.of(OneContext.instance.context!)
+                        .colorScheme
+                        .primary,
               ),
             ),
           ],
