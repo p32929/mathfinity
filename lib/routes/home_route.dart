@@ -16,6 +16,7 @@ class HomeRoute extends StatelessWidget {
 
   getInfoWidgets(double rowPaddings,
       {String text = "0", IconData icon = Icons.menu, Color? color}) {
+    //
     const dividerText = '-:-';
     return Expanded(
       child: Padding(
@@ -184,7 +185,6 @@ class HomeRoute extends StatelessWidget {
 
   stopGame() {
     states.state.setGameRunning(!states.state.isGameRunning);
-    states.state.setCurrentTimer(0);
     gameTimer?.cancel();
 
     showResultDialog();
@@ -197,7 +197,11 @@ class HomeRoute extends StatelessWidget {
               (states.state.totalTrue + states.state.totalFalse)) *
           100;
     } else {
-      accuracy = 100.0; // If totalFalse is 0, accuracy is 100%
+      if (states.state.totalFalse + states.state.totalTrue == 0) {
+        accuracy = 0;
+      } else {
+        accuracy = 100.0;
+      }
     }
     print("accuracy: $accuracy");
 
@@ -211,16 +215,18 @@ class HomeRoute extends StatelessWidget {
           ),
           actions: [
             TextButton(
-                onPressed: () {
-                  states.state.setTotalTrue(0);
-                  states.state.setTotalFalse(0);
-                  // OneContext.instance.popAllDialogs();
-                  Navigator.pop(OneContext.instance.context!);
-                },
-                child: Text(
-                  "OK",
-                  style: GoogleFonts.varelaRound(),
-                )),
+              onPressed: () {
+                states.state.setTotalTrue(0);
+                states.state.setTotalFalse(0);
+                states.state.setCurrentTimer(0);
+                // OneContext.instance.popAllDialogs();
+                Navigator.pop(OneContext.instance.context!);
+              },
+              child: Text(
+                "OK",
+                style: GoogleFonts.varelaRound(),
+              ),
+            ),
           ],
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -234,6 +240,12 @@ class HomeRoute extends StatelessWidget {
               ),
               Text(
                 "${states.state.totalFalse} Wrong Answers",
+                style: GoogleFonts.varelaRound(
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                "${states.state.maxTimer - states.state.currentTimer} Seconds Played",
                 style: GoogleFonts.varelaRound(
                   fontSize: 16,
                 ),
