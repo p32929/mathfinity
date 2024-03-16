@@ -63,6 +63,20 @@ class HomeRoute extends StatelessWidget {
   }
 
   getNumberWidget(double numberButtonSizePadding, {int index = 0}) {
+    onNumberPressed() async {
+      if (states.state.isGameRunning && !states.state.isChangingEquation) {
+        states.state.setChangingEquation(true);
+        if (states.state.correctAnsIndex == index) {
+          states.state.setTotalTrue(states.state.totalTrue + 1);
+        } else {
+          states.state.setTotalFalse(states.state.totalFalse + 1);
+        }
+        await Future.delayed(Duration(milliseconds: 250));
+        setNewEquationAndResults();
+        states.state.setChangingEquation(false);
+      }
+    }
+
     return Expanded(
       child: ElevatedButton(
         style: ButtonStyle(
@@ -74,19 +88,8 @@ class HomeRoute extends StatelessWidget {
             },
           ),
         ),
-        onPressed: () async {
-          if (states.state.isGameRunning && !states.state.isChangingEquation) {
-            states.state.setChangingEquation(true);
-            if (states.state.correctAnsIndex == index) {
-              states.state.setTotalTrue(states.state.totalTrue + 1);
-            } else {
-              states.state.setTotalFalse(states.state.totalFalse + 1);
-            }
-            await Future.delayed(Duration(milliseconds: 250));
-            setNewEquationAndResults();
-            states.state.setChangingEquation(false);
-          }
-        },
+        onLongPress: onNumberPressed,
+        onPressed: onNumberPressed,
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: numberButtonSizePadding),
           child: AutoSizeText(
