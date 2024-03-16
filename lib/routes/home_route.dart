@@ -8,6 +8,7 @@ import 'package:mathfinity/others/utils.dart';
 import 'package:one_context/one_context.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Timer? gameTimer;
 
@@ -181,6 +182,77 @@ class HomeRoute extends StatelessWidget {
               ],
             );
           },
+        );
+      },
+    );
+  }
+
+  onPersonClicked() {
+    var sourceCodeLink = "https://github.com/p32929/mathfinity";
+    var portfolioLink = "https://p32929.github.io/";
+
+    final Uri sourceCodeUri = Uri.parse(sourceCodeLink);
+    final Uri portfolioUri = Uri.parse(portfolioLink);
+
+    Future<void> _launchUrl(Uri uri) async {
+      if (!await launchUrl(uri)) {
+        throw Exception('Could not launch $uri');
+      }
+    }
+
+    OneContext.instance.showDialog(
+      barrierDismissible: false,
+      builder: (p0) {
+        return AlertDialog(
+          title: Text(
+            "Credits",
+            style: GoogleFonts.varelaRound(),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Created by Fayaz Bin Salam"),
+              Text(
+                  "This is an Open Source project. Source code can be found at:  "),
+              InkWell(
+                onTap: () {
+                  _launchUrl(sourceCodeUri);
+                },
+                child: Text(
+                  sourceCodeLink,
+                  style: TextStyle(
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+              Text("Here's my portfolio link:  "),
+              InkWell(
+                onTap: () {
+                  _launchUrl(portfolioUri);
+                },
+                child: Text(
+                  portfolioLink,
+                  style: TextStyle(
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+              Text("Feel free to star, fork, watch. Thanks..."),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Utils.saveSettings();
+                Navigator.pop(OneContext.instance.context!);
+              },
+              child: Text(
+                "OK",
+                style: GoogleFonts.varelaRound(),
+              ),
+            ),
+          ],
         );
       },
     );
@@ -373,6 +445,21 @@ class HomeRoute extends StatelessWidget {
             ),
           ),
           actions: [
+            IconButton(
+              onPressed: states.state.isGameRunning
+                  ? null
+                  : () {
+                      onPersonClicked();
+                    },
+              icon: Icon(
+                Icons.account_circle,
+                color: states.state.isGameRunning
+                    ? Colors.grey
+                    : Theme.of(OneContext.instance.context!)
+                        .colorScheme
+                        .primary,
+              ),
+            ),
             IconButton(
               onPressed: states.state.isGameRunning
                   ? null
