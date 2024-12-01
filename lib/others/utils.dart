@@ -49,16 +49,17 @@ class Utils {
     Prefs.setInt(Constants.MAX_TIMER_SP, states.state.maxTimer);
   }
 
-  static List<int> generateNumbersCloseTo(int number) {
+  static List<int> generateNumbersCloseTo(int answer, {int count = 4}) {
     List<int> numbers = [];
-    int delta = Utils.generateNumberArray(1, 7, shuffle: true)[0];
+    int lastDigit = answer % 10;
 
-    // Generate 4 numbers close to the given number
-    for (int i = 1; i <= 4; i++) {
-      int newNumber = number + delta * i;
-      if (!numbers.contains(newNumber)) {
-        numbers.add(newNumber);
-      }
+    for (int i = 1; i <= count; i++) {
+      int newNumber = answer + (i * 10);
+
+      // Adjust the last digit to match `answer`
+      newNumber = (newNumber ~/ 10) * 10 + lastDigit;
+
+      numbers.add(newNumber);
     }
 
     return numbers;
