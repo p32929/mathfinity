@@ -287,8 +287,8 @@ class HomeRoute extends StatelessWidget {
                 states.state.setTotalTrue(0);
                 states.state.setTotalFalse(0);
                 states.state.setCurrentTimer(0);
-                // OneContext.instance.popAllDialogs();
-                Navigator.pop(OneContext.instance.context!);
+
+                OneContext().popDialog(); // Dismiss dialog
               },
               child: Text(
                 "OK",
