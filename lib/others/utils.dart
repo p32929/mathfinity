@@ -59,9 +59,8 @@ class Utils {
     }
 
     states.state.setResults(
-      generateNumbersCloseTo(
-        276,
-        count: states.state.gridColumns * states.state.gridRows,
+      getInitNumberList(
+        states.state.gridColumns * states.state.gridRows,
       ),
     );
   }
@@ -88,5 +87,35 @@ class Utils {
     }
 
     return numbers;
+  }
+
+  static List<int> getInitNumberList(int count) {
+    if (count <= 0) return [];
+
+    // Static array with the desired sequence
+    List<int> baseNumbers = [
+      12,
+      34,
+      56,
+      78,
+      90,
+      13,
+      24,
+      57,
+      68,
+      79,
+      91,
+      23,
+      45,
+      67,
+      89,
+      10
+    ];
+
+    // Get the first `count` numbers, cycling through if necessary
+    List<int> result = List.generate(
+        count, (index) => baseNumbers[index % baseNumbers.length]);
+
+    return result;
   }
 }
