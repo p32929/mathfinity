@@ -204,7 +204,7 @@ class HomeRoute extends StatelessWidget {
                     textAlign: TextAlign.start,
                   ),
                   Slider(
-                    min: 1,
+                    min: 2,
                     max: 4,
                     divisions: 3,
                     value: states.state.gridRows.toDouble(),
@@ -221,7 +221,7 @@ class HomeRoute extends StatelessWidget {
                     textAlign: TextAlign.start,
                   ),
                   Slider(
-                    min: 1,
+                    min: 2,
                     max: 4,
                     divisions: 3,
                     value: states.state.gridColumns.toDouble(),
