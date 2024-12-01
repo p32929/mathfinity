@@ -81,9 +81,9 @@ class HomeRoute extends StatelessWidget {
     return Expanded(
       child: ElevatedButton(
         style: ButtonStyle(
-          overlayColor: MaterialStateProperty.resolveWith(
+          overlayColor: WidgetStateProperty.resolveWith(
             (states) {
-              return states.contains(MaterialState.pressed)
+              return states.contains(WidgetState.pressed)
                   ? getResultButtonRippleColor(index)
                   : null;
             },
@@ -194,12 +194,6 @@ class HomeRoute extends StatelessWidget {
     final Uri sourceCodeUri = Uri.parse(sourceCodeLink);
     final Uri portfolioUri = Uri.parse(portfolioLink);
 
-    Future<void> _launchUrl(Uri uri) async {
-      if (!await launchUrl(uri)) {
-        throw Exception('Could not launch $uri');
-      }
-    }
-
     OneContext.instance.showDialog(
       barrierDismissible: false,
       builder: (p0) {
@@ -217,7 +211,7 @@ class HomeRoute extends StatelessWidget {
                   "This is an Open Source project. Source code can be found at:  "),
               InkWell(
                 onTap: () {
-                  _launchUrl(sourceCodeUri);
+                  launchUrl(sourceCodeUri);
                 },
                 child: Text(
                   sourceCodeLink,
@@ -229,7 +223,7 @@ class HomeRoute extends StatelessWidget {
               Text("Here's my portfolio link:  "),
               InkWell(
                 onTap: () {
-                  _launchUrl(portfolioUri);
+                  launchUrl(portfolioUri);
                 },
                 child: Text(
                   portfolioLink,
@@ -557,7 +551,7 @@ class HomeRoute extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 36.0),
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        overlayColor: MaterialStateProperty.resolveWith(
+                        overlayColor: WidgetStateProperty.resolveWith(
                           (buttonState) {
                             getColor() {
                               if (states.state.isGameRunning) {
@@ -567,7 +561,7 @@ class HomeRoute extends StatelessWidget {
                               }
                             }
 
-                            return buttonState.contains(MaterialState.pressed)
+                            return buttonState.contains(WidgetState.pressed)
                                 ? getColor()
                                 : null;
                           },
