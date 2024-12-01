@@ -51,7 +51,7 @@ class Utils {
     }
 
     if (gridRows != 0) {
-      states.state.setGridColumns(gridRows);
+      states.state.setGridRows(gridRows);
     }
 
     if (gridColumns != 0) {
