@@ -86,7 +86,7 @@ class States {
   setGridColumns(int num) {
     gridColumns = num;
     var res = Utils.generateNumbersCloseTo(
-      123,
+      276,
       count: states.state.gridColumns * states.state.gridRows,
     );
     states.state.results = res;
@@ -96,7 +96,7 @@ class States {
   setGridRows(int num) {
     gridRows = num;
     var res = Utils.generateNumbersCloseTo(
-      123,
+      276,
       count: states.state.gridColumns * states.state.gridRows,
     );
     states.state.results = res;

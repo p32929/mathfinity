@@ -60,7 +60,7 @@ class Utils {
 
     states.state.setResults(
       generateNumbersCloseTo(
-        123,
+        276,
         count: states.state.gridColumns * states.state.gridRows,
       ),
     );

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mathfinity/others/constants.dart';
 import 'package:mathfinity/others/states.dart';
@@ -61,17 +60,29 @@ class HomeRoute extends StatelessWidget {
 
   Widget buildResultsGrid() {
     return Expanded(
-      child: GridView.builder(
-        padding: EdgeInsets.all(8),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: states.state.gridColumns,
-          childAspectRatio: 2,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-        ),
-        itemCount: states.state.gridRows * states.state.gridColumns,
-        itemBuilder: (context, index) {
-          return getNumberWidget(index: index);
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          double itemHeight =
+              (constraints.maxHeight - (states.state.gridRows - 1) * 12) /
+                  states.state.gridRows;
+          double itemWidth =
+              (constraints.maxWidth - (states.state.gridColumns - 1) * 12) /
+                  states.state.gridColumns;
+
+          return GridView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: states.state.gridColumns,
+              childAspectRatio: itemWidth / itemHeight,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+            ),
+            itemCount: states.state.gridRows * states.state.gridColumns,
+            itemBuilder: (context, index) {
+              return getNumberWidget(index: index);
+            },
+          );
         },
       ),
     );
@@ -94,21 +105,29 @@ class HomeRoute extends StatelessWidget {
 
     return ElevatedButton(
       style: ButtonStyle(
-        overlayColor: WidgetStateProperty.resolveWith(
+        overlayColor: MaterialStateProperty.resolveWith(
           (states) {
-            return states.contains(WidgetState.pressed)
+            return states.contains(MaterialState.pressed)
                 ? getResultButtonRippleColor(index)
                 : null;
           },
         ),
+        padding: MaterialStateProperty.all(EdgeInsets.zero),
       ),
       onLongPress: onNumberPressed,
       onPressed: onNumberPressed,
-      child: AutoSizeText(
-        states.state.results[index].toString(),
-        style: GoogleFonts.varelaRound(),
-        minFontSize: 18,
-        maxFontSize: 36,
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: Padding(
+          padding: EdgeInsets.all(4),
+          child: Text(
+            states.state.results[index].toString(),
+            style: GoogleFonts.varelaRound(
+              fontWeight: FontWeight.bold,
+              fontSize: 32,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -532,32 +551,38 @@ class HomeRoute extends StatelessWidget {
             SizedBox(height: 16),
             buildResultsGrid(),
             SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 36.0),
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  overlayColor: WidgetStateProperty.resolveWith(
-                    (buttonState) {
-                      return buttonState.contains(WidgetState.pressed)
-                          ? (states.state.isGameRunning
-                              ? Colors.red
-                              : Colors.green)
-                          : null;
-                    },
-                  ),
-                ),
-                onPressed: onStartStopClicked,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    states.state.isGameRunning ? "STOP" : "START",
-                    style: GoogleFonts.varelaRound(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 36.0),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        overlayColor: WidgetStateProperty.resolveWith(
+                          (buttonState) {
+                            return buttonState.contains(WidgetState.pressed)
+                                ? (states.state.isGameRunning
+                                    ? Colors.red
+                                    : Colors.green)
+                                : null;
+                          },
+                        ),
+                      ),
+                      onPressed: onStartStopClicked,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          states.state.isGameRunning ? "STOP" : "START",
+                          style: GoogleFonts.varelaRound(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
             SizedBox(height: 16),
           ],
