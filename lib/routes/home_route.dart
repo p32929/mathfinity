@@ -60,30 +60,33 @@ class HomeRoute extends StatelessWidget {
 
   Widget buildResultsGrid() {
     return Expanded(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          double itemHeight =
-              (constraints.maxHeight - (states.state.gridRows - 1) * 12) /
-                  states.state.gridRows;
-          double itemWidth =
-              (constraints.maxWidth - (states.state.gridColumns - 1) * 12) /
-                  states.state.gridColumns;
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            double itemHeight =
+                (constraints.maxHeight - (states.state.gridRows - 1) * 12) /
+                    states.state.gridRows;
+            double itemWidth =
+                (constraints.maxWidth - (states.state.gridColumns - 1) * 12) /
+                    states.state.gridColumns;
 
-          return GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: states.state.gridColumns,
-              childAspectRatio: itemWidth / itemHeight,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-            ),
-            itemCount: states.state.gridRows * states.state.gridColumns,
-            itemBuilder: (context, index) {
-              return getNumberWidget(index: index);
-            },
-          );
-        },
+            return GridView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: states.state.gridColumns,
+                childAspectRatio: itemWidth / itemHeight,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+              ),
+              itemCount: states.state.gridRows * states.state.gridColumns,
+              itemBuilder: (context, index) {
+                return getNumberWidget(index: index);
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -206,7 +209,6 @@ class HomeRoute extends StatelessWidget {
                   Slider(
                     min: 2,
                     max: 4,
-                    divisions: 3,
                     value: states.state.gridRows.toDouble(),
                     onChanged: (value) {
                       states.state.setGridRows(value.toInt());
@@ -223,7 +225,6 @@ class HomeRoute extends StatelessWidget {
                   Slider(
                     min: 2,
                     max: 4,
-                    divisions: 3,
                     value: states.state.gridColumns.toDouble(),
                     onChanged: (value) {
                       states.state.setGridColumns(value.toInt());
