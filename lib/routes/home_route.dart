@@ -15,47 +15,43 @@ Timer? gameTimer;
 class HomeRoute extends StatelessWidget {
   const HomeRoute({super.key});
 
-  getInfoWidgets(double rowPaddings,
+  Widget getInfoWidgets(
       {String text = "0", IconData icon = Icons.menu, Color? color}) {
-    //
     const dividerText = '-:-';
     return Expanded(
-      child: Padding(
-        padding: EdgeInsets.all(rowPaddings),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              dividerText,
-              style: GoogleFonts.varelaRound(
-                color: Colors.blueGrey,
-              ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            dividerText,
+            style: GoogleFonts.varelaRound(
+              color: Colors.blueGrey,
             ),
-            Icon(
-              icon,
-              size: 32,
+          ),
+          Icon(
+            icon,
+            size: 32,
+            color: color,
+          ),
+          Text(
+            text,
+            style: GoogleFonts.varelaRound(
+              fontSize: 24,
               color: color,
             ),
-            Text(
-              text,
-              style: GoogleFonts.varelaRound(
-                fontSize: 24,
-                color: color,
-              ),
+          ),
+          Text(
+            dividerText,
+            style: TextStyle(
+              color: Colors.blueGrey,
             ),
-            Text(
-              dividerText,
-              style: TextStyle(
-                color: Colors.blueGrey,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  getResultButtonRippleColor(int index) {
+  Color getResultButtonRippleColor(int index) {
     if (index == states.state.correctAnsIndex) {
       return Colors.green;
     } else {
@@ -63,7 +59,25 @@ class HomeRoute extends StatelessWidget {
     }
   }
 
-  getNumberWidget(double numberButtonSizePadding, {int index = 0}) {
+  Widget buildResultsGrid() {
+    return Expanded(
+      child: GridView.builder(
+        padding: EdgeInsets.all(8),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: states.state.gridColumns,
+          childAspectRatio: 2,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+        ),
+        itemCount: states.state.gridRows * states.state.gridColumns,
+        itemBuilder: (context, index) {
+          return getNumberWidget(index: index);
+        },
+      ),
+    );
+  }
+
+  Widget getNumberWidget({int index = 0}) {
     onNumberPressed() async {
       if (states.state.isGameRunning && !states.state.isChangingEquation) {
         states.state.setChangingEquation(true);
@@ -78,32 +92,28 @@ class HomeRoute extends StatelessWidget {
       }
     }
 
-    return Expanded(
-      child: ElevatedButton(
-        style: ButtonStyle(
-          overlayColor: WidgetStateProperty.resolveWith(
-            (states) {
-              return states.contains(WidgetState.pressed)
-                  ? getResultButtonRippleColor(index)
-                  : null;
-            },
-          ),
+    return ElevatedButton(
+      style: ButtonStyle(
+        overlayColor: WidgetStateProperty.resolveWith(
+          (states) {
+            return states.contains(WidgetState.pressed)
+                ? getResultButtonRippleColor(index)
+                : null;
+          },
         ),
-        onLongPress: onNumberPressed,
-        onPressed: onNumberPressed,
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: numberButtonSizePadding),
-          child: AutoSizeText(
-            states.state.results[index].toString(),
-            style: GoogleFonts.varelaRound(),
-            minFontSize: 36,
-          ),
-        ),
+      ),
+      onLongPress: onNumberPressed,
+      onPressed: onNumberPressed,
+      child: AutoSizeText(
+        states.state.results[index].toString(),
+        style: GoogleFonts.varelaRound(),
+        minFontSize: 18,
+        maxFontSize: 36,
       ),
     );
   }
 
-  onSettingsClicked(double rowPaddings) {
+  void onSettingsClicked() {
     OneContext().showDialog(
       barrierDismissible: false,
       builder: (p0) {
@@ -134,7 +144,7 @@ class HomeRoute extends StatelessWidget {
                       states.state.setMinNumber(value.toInt());
                     },
                   ),
-                  Padding(padding: EdgeInsets.all(rowPaddings)),
+                  SizedBox(height: 16),
                   Text(
                     "Biggest number: ${states.state.maxNumber}",
                     style: GoogleFonts.varelaRound(
@@ -150,7 +160,7 @@ class HomeRoute extends StatelessWidget {
                       states.state.setMaxNumber(value.toInt());
                     },
                   ),
-                  Padding(padding: EdgeInsets.all(rowPaddings)),
+                  SizedBox(height: 16),
                   Text(
                     "Timer: ${states.state.maxTimer}",
                     style: GoogleFonts.varelaRound(
@@ -166,13 +176,47 @@ class HomeRoute extends StatelessWidget {
                       states.state.setMaxTimer(value.toInt());
                     },
                   ),
+                  SizedBox(height: 16),
+                  Text(
+                    "Grid Rows: ${states.state.gridRows}",
+                    style: GoogleFonts.varelaRound(
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                  Slider(
+                    min: 1,
+                    max: 4,
+                    divisions: 3,
+                    value: states.state.gridRows.toDouble(),
+                    onChanged: (value) {
+                      states.state.setGridRows(value.toInt());
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    "Grid Columns: ${states.state.gridColumns}",
+                    style: GoogleFonts.varelaRound(
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                  Slider(
+                    min: 1,
+                    max: 4,
+                    divisions: 3,
+                    value: states.state.gridColumns.toDouble(),
+                    onChanged: (value) {
+                      states.state.setGridColumns(value.toInt());
+                    },
+                  ),
                 ],
               ),
               actions: [
                 TextButton(
                   onPressed: () {
                     Utils.saveSettings();
-                    OneContext().popDialog(); // Dismiss dialog
+                    OneContext().popDialog();
                   },
                   child: Text(
                     "OK",
@@ -187,7 +231,7 @@ class HomeRoute extends StatelessWidget {
     );
   }
 
-  onPersonClicked() {
+  void onPersonClicked() {
     var sourceCodeLink = "https://github.com/p32929/mathfinity";
     var portfolioLink = "https://p32929.github.io/";
 
@@ -238,7 +282,7 @@ class HomeRoute extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                OneContext().popDialog(); // Dismiss dialog
+                OneContext().popDialog();
               },
               child: Text(
                 "OK",
@@ -251,27 +295,22 @@ class HomeRoute extends StatelessWidget {
     );
   }
 
-  stopGame() {
-    states.state.setGameRunning(!states.state.isGameRunning);
+  void stopGame() {
+    states.state.setGameRunning(false);
     gameTimer?.cancel();
-
     showResultDialog();
   }
 
-  showResultDialog() {
+  void showResultDialog() {
     double accuracy;
     if (states.state.totalFalse != 0) {
       accuracy = (states.state.totalTrue /
               (states.state.totalTrue + states.state.totalFalse)) *
           100;
     } else {
-      if (states.state.totalFalse + states.state.totalTrue == 0) {
-        accuracy = 0;
-      } else {
-        accuracy = 100.0;
-      }
+      accuracy =
+          states.state.totalTrue + states.state.totalFalse == 0 ? 0 : 100.0;
     }
-    print("accuracy: $accuracy");
 
     OneContext.instance.showDialog(
       barrierDismissible: false,
@@ -287,8 +326,7 @@ class HomeRoute extends StatelessWidget {
                 states.state.setTotalTrue(0);
                 states.state.setTotalFalse(0);
                 states.state.setCurrentTimer(0);
-
-                OneContext().popDialog(); // Dismiss dialog
+                OneContext().popDialog();
               },
               child: Text(
                 "OK",
@@ -332,20 +370,21 @@ class HomeRoute extends StatelessWidget {
   }
 
   int getMathResult(int num1, int num2, String operator) {
-    if (operator == '+') {
-      return num1 + num2;
-    } else if (operator == '-') {
-      return num1 - num2;
-    } else if (operator == 'X') {
-      return num1 * num2;
-    } else if (operator == '/') {
-      return num1 ~/ num2;
+    switch (operator) {
+      case '+':
+        return num1 + num2;
+      case '-':
+        return num1 - num2;
+      case 'X':
+        return num1 * num2;
+      case '/':
+        return num1 ~/ num2;
+      default:
+        return 0;
     }
-
-    return 0;
   }
 
-  setNewEquationAndResults() {
+  void setNewEquationAndResults() {
     var numbersArray = Utils.generateNumberArray(
       states.state.minNumber,
       states.state.maxNumber,
@@ -354,9 +393,6 @@ class HomeRoute extends StatelessWidget {
 
     int num1 = numbersArray[0];
     int num2 = numbersArray[1];
-
-    // int num1 = 98;
-    // int num2 = 99;
 
     if (num2 > num1) {
       int temp = num1;
@@ -382,21 +418,20 @@ class HomeRoute extends StatelessWidget {
     states.state.setFirstNumber(num1);
     states.state.setSecondNumber(num2);
 
-    List<int> results = Utils.generateNumbersCloseTo(answer);
+    int totalOptions = states.state.gridRows * states.state.gridColumns;
+    List<int> results =
+        Utils.generateNumbersCloseTo(answer, count: totalOptions);
     operators = Utils.shuffleArray<String>(operators);
 
-    for (var i = 0; i < operators.length; i++) {
-      if (operators[i] == op0) {
-        results[i] = answer;
-        states.state.setCorrectAnsIndex(i);
-        break;
-      }
-    }
+    int correctIndex = Utils.getRandomNumber(0, totalOptions - 1);
+    results[correctIndex] = answer;
+    states.state.setCorrectAnsIndex(correctIndex);
+
     states.state.setResults(results);
   }
 
-  startGame() {
-    states.state.setGameRunning(!states.state.isGameRunning);
+  void startGame() {
+    states.state.setGameRunning(true);
     states.state.setCurrentTimer(states.state.maxTimer);
 
     setNewEquationAndResults();
@@ -410,7 +445,7 @@ class HomeRoute extends StatelessWidget {
     });
   }
 
-  onStartStopClicked() {
+  void onStartStopClicked() {
     if (states.state.isGameRunning) {
       stopGame();
     } else {
@@ -420,11 +455,6 @@ class HomeRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double screenHeight = size.height;
-    double rowPaddings = screenHeight / 100;
-    double numberButtonSizePadding = screenHeight / 19;
-
     return StateBuilder(
       observe: () => states,
       builder: (context, _) => Scaffold(
@@ -433,17 +463,12 @@ class HomeRoute extends StatelessWidget {
             "MathFinity",
             style: GoogleFonts.varelaRound(
               color: Theme.of(OneContext.instance.context!).colorScheme.primary,
-              // fontStyle: FontStyle.italic,
               fontWeight: FontWeight.bold,
             ),
           ),
           actions: [
             IconButton(
-              onPressed: states.state.isGameRunning
-                  ? null
-                  : () {
-                      onPersonClicked();
-                    },
+              onPressed: states.state.isGameRunning ? null : onPersonClicked,
               icon: Icon(
                 Icons.account_circle,
                 color: states.state.isGameRunning
@@ -454,11 +479,7 @@ class HomeRoute extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: states.state.isGameRunning
-                  ? null
-                  : () {
-                      onSettingsClicked(rowPaddings);
-                    },
+              onPressed: states.state.isGameRunning ? null : onSettingsClicked,
               icon: Icon(
                 Icons.settings,
                 color: states.state.isGameRunning
@@ -477,7 +498,6 @@ class HomeRoute extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 getInfoWidgets(
-                  rowPaddings,
                   icon: Icons.check_circle,
                   color: Theme.of(OneContext.instance.context!)
                       .colorScheme
@@ -485,7 +505,6 @@ class HomeRoute extends StatelessWidget {
                   text: states.state.totalTrue.toString(),
                 ),
                 getInfoWidgets(
-                  rowPaddings,
                   icon: states.state.currentTimer % 2 == 0
                       ? Icons.hourglass_bottom
                       : Icons.hourglass_top,
@@ -494,7 +513,6 @@ class HomeRoute extends StatelessWidget {
                   text: states.state.currentTimer.toString(),
                 ),
                 getInfoWidgets(
-                  rowPaddings,
                   icon: Icons.cancel,
                   color:
                       Theme.of(OneContext.instance.context!).colorScheme.error,
@@ -502,89 +520,46 @@ class HomeRoute extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(padding: EdgeInsets.all(rowPaddings)),
+            SizedBox(height: 16),
             Text(
               "${states.state.firstNumber} ${states.state.currentOperator} ${states.state.secondNumber}",
               style: GoogleFonts.varelaRound(
                 fontSize: 36,
-                // color:
-                //     Theme.of(OneContext.instance.context!).colorScheme.primary,
                 fontWeight: FontWeight.w500,
                 letterSpacing: 12,
               ),
             ),
-            Padding(padding: EdgeInsets.all(rowPaddings)),
+            SizedBox(height: 16),
+            buildResultsGrid(),
+            SizedBox(height: 16),
             Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: rowPaddings,
-                horizontal: rowPaddings * 3,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  getNumberWidget(numberButtonSizePadding, index: 0),
-                  Padding(padding: EdgeInsets.all(rowPaddings)),
-                  getNumberWidget(numberButtonSizePadding, index: 1),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: rowPaddings,
-                horizontal: rowPaddings * 3,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  getNumberWidget(numberButtonSizePadding, index: 2),
-                  Padding(padding: EdgeInsets.all(rowPaddings)),
-                  getNumberWidget(numberButtonSizePadding, index: 3),
-                ],
-              ),
-            ),
-            Padding(padding: EdgeInsets.all(rowPaddings)),
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 36.0),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        overlayColor: WidgetStateProperty.resolveWith(
-                          (buttonState) {
-                            getColor() {
-                              if (states.state.isGameRunning) {
-                                return Colors.red;
-                              } else {
-                                return Colors.green;
-                              }
-                            }
-
-                            return buttonState.contains(WidgetState.pressed)
-                                ? getColor()
-                                : null;
-                          },
-                        ),
-                      ),
-                      onPressed: () {
-                        onStartStopClicked();
-                        // setEquationAndResults();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          states.state.isGameRunning ? "STOP" : "START",
-                          style: GoogleFonts.varelaRound(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+              padding: const EdgeInsets.symmetric(horizontal: 36.0),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  overlayColor: WidgetStateProperty.resolveWith(
+                    (buttonState) {
+                      return buttonState.contains(WidgetState.pressed)
+                          ? (states.state.isGameRunning
+                              ? Colors.red
+                              : Colors.green)
+                          : null;
+                    },
+                  ),
+                ),
+                onPressed: onStartStopClicked,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    states.state.isGameRunning ? "STOP" : "START",
+                    style: GoogleFonts.varelaRound(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-              ],
-            )
+              ),
+            ),
+            SizedBox(height: 16),
           ],
         ),
       ),

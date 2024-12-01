@@ -1,4 +1,5 @@
 import 'package:mathfinity/others/constants.dart';
+import 'package:mathfinity/others/utils.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
 class States {
@@ -14,21 +15,13 @@ class States {
 
   String currentOperator = "X";
   int correctAnsIndex = -1;
+  int gridColumns = 2;
+  int gridRows = 2;
 
   bool isGameRunning = false;
   bool isChangingEquation = false;
 
-  var results = [
-    12,
-    45,
-    78,
-    36,
-
-    // 9980,
-    // 9980,
-    // 9980,
-    // 9980,
-  ];
+  var results = [];
 
   setMinNumber(int num) {
     minNumber = num;
@@ -87,6 +80,26 @@ class States {
 
   setCorrectAnsIndex(int num) {
     correctAnsIndex = num;
+    states.notify();
+  }
+
+  setGridColumns(int num) {
+    gridColumns = num;
+    var res = Utils.generateNumbersCloseTo(
+      123,
+      count: states.state.gridColumns * states.state.gridRows,
+    );
+    states.state.results = res;
+    states.notify();
+  }
+
+  setGridRows(int num) {
+    gridRows = num;
+    var res = Utils.generateNumbersCloseTo(
+      123,
+      count: states.state.gridColumns * states.state.gridRows,
+    );
+    states.state.results = res;
     states.notify();
   }
 
