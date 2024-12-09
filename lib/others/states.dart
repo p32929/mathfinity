@@ -15,8 +15,8 @@ class States {
 
   String currentOperator = "X";
   int correctAnsIndex = -1;
-  int gridColumns = 2;
-  int gridRows = 2;
+  int gridColumns = 4;
+  int gridRows = 4;
 
   bool isGameRunning = false;
   bool isChangingEquation = false;

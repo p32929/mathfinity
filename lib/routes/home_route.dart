@@ -555,32 +555,9 @@ class HomeRoute extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 36.0),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        overlayColor: WidgetStateProperty.resolveWith(
-                          (buttonState) {
-                            return buttonState.contains(WidgetState.pressed)
-                                ? (states.state.isGameRunning
-                                    ? Colors.red
-                                    : Colors.green)
-                                : null;
-                          },
-                        ),
-                      ),
-                      onPressed: onStartStopClicked,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          states.state.isGameRunning ? "STOP" : "START",
-                          style: GoogleFonts.varelaRound(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
+                  child: StartButton(
+                    onStartStopClicked: onStartStopClicked,
+                    isGameRunning: states.state.isGameRunning,
                   ),
                 ),
               ],
@@ -589,6 +566,95 @@ class HomeRoute extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class StartButton extends StatefulWidget {
+  final Function() onStartStopClicked;
+  final bool isGameRunning;
+
+  const StartButton({
+    Key? key,
+    required this.onStartStopClicked,
+    required this.isGameRunning,
+  }) : super(key: key);
+
+  @override
+  _StartButtonState createState() => _StartButtonState();
+}
+
+class _StartButtonState extends State<StartButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+
+    _animation = Tween<double>(begin: 0.0, end: 12.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 36.0),
+            child: AnimatedBuilder(
+              animation: _animation,
+              builder: (context, child) {
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                        36.0), // Match the button's radius
+                    boxShadow: [
+                      BoxShadow(
+                        color: widget.isGameRunning
+                            ? Colors
+                                .transparent // No glow when the game is running
+                            : Theme.of(context).colorScheme.primary,
+                        blurRadius: _animation.value,
+                        spreadRadius: _animation.value / 2,
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: widget.isGameRunning
+                          ? Colors.red
+                          : Theme.of(context).colorScheme.primary,
+                      padding: const EdgeInsets.all(16.0),
+                    ),
+                    onPressed: widget.onStartStopClicked,
+                    child: Text(
+                      widget.isGameRunning ? "STOP" : "START",
+                      style: GoogleFonts.varelaRound(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
