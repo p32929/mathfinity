@@ -1,0 +1,16 @@
+{
+  "name": "mathfinity",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/p32929/mathfinity.git",
+  "author": "p32929 <p32929@yahoo.com>",
+  "license": "MIT",
+  "scripts": {
+    "predeploy": "flutter build web --base-href /mathfinity/",
+    "deploy": "gh-pages -d build/web"
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.0"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+}
