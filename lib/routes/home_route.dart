@@ -479,6 +479,7 @@ class HomeRoute extends StatelessWidget {
             const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
+              height: 56,
               child: FilledButton(
                 onPressed: () {
                   states.state.setTotalTrue(0);
@@ -486,7 +487,11 @@ class HomeRoute extends StatelessWidget {
                   states.state.setCurrentTimer(0);
                   Navigator.pop(context);
                 },
-                child: Text("Dismiss", style: GoogleFonts.varelaRound(fontWeight: FontWeight.bold)),
+                style: FilledButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+                child: Text("Dismiss", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ),
           ],
@@ -544,12 +549,17 @@ class HomeRoute extends StatelessWidget {
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
+              height: 56,
               child: FilledButton(
                 onPressed: () {
                   Utils.saveSettings();
                   Navigator.pop(context);
                 },
-                child: Text("Save Settings", style: GoogleFonts.varelaRound(fontWeight: FontWeight.bold)),
+                style: FilledButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+                child: Text("Save Settings", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ),
           ],
@@ -625,12 +635,17 @@ class HomeRoute extends StatelessWidget {
             const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
+              height: 56,
               child: FilledButton(
                 onPressed: () {
                   Utils.saveSettings();
                   Navigator.pop(context);
                 },
-                child: Text("Apply Theme", style: GoogleFonts.varelaRound(fontWeight: FontWeight.bold)),
+                style: FilledButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+                child: Text("Apply Theme", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ),
           ],
@@ -749,9 +764,14 @@ class HomeRoute extends StatelessWidget {
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
-              child: OutlinedButton(
+              height: 56,
+              child: FilledButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text("Close", style: GoogleFonts.varelaRound(fontWeight: FontWeight.bold)),
+                style: FilledButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+                child: Text("Close", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ),
           ],
