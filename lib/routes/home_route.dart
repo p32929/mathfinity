@@ -536,8 +536,8 @@ class HomeRoute extends StatelessWidget {
           children: [
             Text("Game Settings", style: GoogleFonts.varelaRound(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 24),
-            _buildSlider("Min Number", states.state.minNumber.toDouble(), Constants.minNumber.toDouble(), (states.state.maxNumber - 1).toDouble(), (v) => states.state.setMinNumber(v.toInt())),
-            _buildSlider("Max Number", states.state.maxNumber.toDouble(), (states.state.minNumber + 1).toDouble(), Constants.maxNumber.toDouble(), (v) => states.state.setMaxNumber(v.toInt())),
+            _buildSlider("Min Value", states.state.minNumber.toDouble(), Constants.minNumber.toDouble(), (states.state.maxNumber - 1).toDouble(), (v) => states.state.setMinNumber(v.toInt())),
+            _buildSlider("Max Value", states.state.maxNumber.toDouble(), (states.state.minNumber + 1).toDouble(), Constants.maxNumber.toDouble(), (v) => states.state.setMaxNumber(v.toInt())),
             _buildSlider("Timer", states.state.maxTimer.toDouble(), Constants.minTimer.toDouble(), Constants.maxTimer.toDouble(), (v) => states.state.setMaxTimer(v.toInt())),
             _buildSlider("Rows", states.state.gridRows.toDouble(), 2, 4, (v) => states.state.setGridRows(v.toInt()), divisions: 2),
             _buildSlider("Columns", states.state.gridColumns.toDouble(), 2, 4, (v) => states.state.setGridColumns(v.toInt()), divisions: 2),
