@@ -31,7 +31,27 @@ MathFinity is a beautiful, fast-paced math game built with Flutter that challeng
 
 # Screenshots
 
+<div align="center">
+  <img width="180" src="https://github.com/user-attachments/assets/98e09e54-f34f-419f-8516-34559926c44f" alt="Screenshot 1" />
+  &nbsp;&nbsp;
+  <img width="180" src="https://github.com/user-attachments/assets/7cfbe5b2-370a-49eb-9248-6c3818b8e16f" alt="Screenshot 2" />
+  &nbsp;&nbsp;
+  <img width="180" src="https://github.com/user-attachments/assets/7b196fd9-4ab5-4a03-b74f-84c37249a7b7" alt="Screenshot 3" />
+  &nbsp;&nbsp;
+  <img width="180" src="https://github.com/user-attachments/assets/72634d35-82ae-4c45-818c-11d91bcb3299" alt="Screenshot 4" />
+</div>
 
+<br>
+
+<div align="center">
+  <img width="180" src="https://github.com/user-attachments/assets/f0ae5979-83a3-4e69-9c7b-778b6165c041" alt="Screenshot 5" />
+  &nbsp;&nbsp;
+  <img width="180" src="https://github.com/user-attachments/assets/3aefea0e-e238-4125-9084-7ecc9f7de528" alt="Screenshot 6" />
+  &nbsp;&nbsp;
+  <img width="180" src="https://github.com/user-attachments/assets/03cb7be6-a846-48b2-be6f-16a2a7c47ed2" alt="Screenshot 7" />
+  &nbsp;&nbsp;
+  <img width="180" src="https://github.com/user-attachments/assets/31196fcd-4d2c-4455-b4b4-770f2cdaedc6" alt="Screenshot 8" />
+</div>
 
 ## 🚀 Try It Now
 
