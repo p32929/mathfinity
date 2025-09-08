@@ -32,21 +32,25 @@ MathFinity is a beautiful, fast-paced math game built with Flutter that challeng
 # Screenshots
 
 <div align="center">
-  <img width="280" src="https://github.com/user-attachments/assets/fc06f26a-a4f8-41da-938c-53011d1fc0e2" alt="Screenshot 1" />
-  &nbsp;&nbsp;&nbsp;
-  <img width="280" src="https://github.com/user-attachments/assets/d3a54adf-9fd7-4e28-8997-27058276abd3" alt="Screenshot 2" />
-  &nbsp;&nbsp;&nbsp;
-  <img width="280" src="https://github.com/user-attachments/assets/31023a71-cf5f-4611-a172-631a38411e1d" alt="Screenshot 3" />
+  <img width="200" src="https://github.com/user-attachments/assets/33c366c6-3659-4331-b388-0c9f91dc14cd" alt="Screenshot 1" />
+  &nbsp;&nbsp;
+  <img width="200" src="https://github.com/user-attachments/assets/f15fc2ed-99b9-4c36-8d99-e0097d3dd350" alt="Screenshot 2" />
+  &nbsp;&nbsp;
+  <img width="200" src="https://github.com/user-attachments/assets/dd659490-3a9b-429f-8eef-f015a84fe961" alt="Screenshot 3" />
+  &nbsp;&nbsp;
+  <img width="200" src="https://github.com/user-attachments/assets/a4a42dd5-a9a0-4400-aff0-c23e6943657f" alt="Screenshot 4" />
 </div>
 
 <br>
 
 <div align="center">
-  <img width="280" src="https://github.com/user-attachments/assets/7f569068-4cde-424b-8ef0-65caa82ef08a" alt="Screenshot 4" />
-  &nbsp;&nbsp;&nbsp;
-  <img width="280" src="https://github.com/user-attachments/assets/7eebc058-23ce-43fe-b203-a89b14d4eb41" alt="Screenshot 5" />
-  &nbsp;&nbsp;&nbsp;
-  <img width="280" src="https://github.com/user-attachments/assets/f8321a19-89da-4553-9fca-8c2e718ba51d" alt="Screenshot 6" />
+  <img width="200" src="https://github.com/user-attachments/assets/d775e899-802d-4d61-9126-8329332126de" alt="Screenshot 5" />
+  &nbsp;&nbsp;
+  <img width="200" src="https://github.com/user-attachments/assets/cde69f4b-6a3c-444e-ab88-02c8f8e010d0" alt="Screenshot 6" />
+  &nbsp;&nbsp;
+  <img width="200" src="https://github.com/user-attachments/assets/c058c741-dfcc-4314-9642-7e6fc7581d47" alt="Screenshot 7" />
+  &nbsp;&nbsp;
+  <img width="200" src="https://github.com/user-attachments/assets/2b2177e3-d48e-48c0-ae4a-011553488072" alt="Screenshot 8" />
 </div>
 
 ## 🚀 Try It Now
