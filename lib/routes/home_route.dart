@@ -36,36 +36,21 @@ class HomeRoute extends StatelessWidget {
               onPressed: states.state.isGameRunning ? null : _showThemeSettings,
               icon: Icon(
                 Icons.palette_rounded,
-                color: states.state.isGameRunning
-                    ? Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.3)
-                    : null,
+                color: states.state.isGameRunning ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3) : null,
               ),
             ),
             IconButton(
               onPressed: states.state.isGameRunning ? null : _showSettings,
               icon: Icon(
                 Icons.settings_rounded,
-                color: states.state.isGameRunning
-                    ? Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.3)
-                    : null,
+                color: states.state.isGameRunning ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3) : null,
               ),
             ),
             IconButton(
               onPressed: states.state.isGameRunning ? null : _showAbout,
               icon: Icon(
                 Icons.info_rounded,
-                color: states.state.isGameRunning
-                    ? Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.3)
-                    : null,
+                color: states.state.isGameRunning ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3) : null,
               ),
             ),
           ],
@@ -144,8 +129,7 @@ class HomeRoute extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(BuildContext context, String title, String value,
-      IconData icon, Color color) {
+  Widget _buildStatCard(BuildContext context, String title, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -202,7 +186,7 @@ class HomeRoute extends StatelessWidget {
     int columns = states.state.gridColumns;
     int rows = states.state.gridRows;
     int totalItems = rows * columns;
-    
+
     // Ensure results array has enough items
     List<int> displayNumbers = [];
     if (states.state.results.length < totalItems) {
@@ -213,7 +197,7 @@ class HomeRoute extends StatelessWidget {
     } else {
       displayNumbers = List<int>.from(states.state.results.take(totalItems));
     }
-    
+
     return Column(
       children: List.generate(rows, (rowIndex) {
         return Expanded(
@@ -259,7 +243,6 @@ class HomeRoute extends StatelessWidget {
       }),
     );
   }
-
 
   Widget _buildStartButton(BuildContext context) {
     return TweenAnimationBuilder<double>(
@@ -378,7 +361,12 @@ class HomeRoute extends StatelessWidget {
       num2 = temp;
     }
 
-    var operators = ["+", "-", "X", "/"];
+    var operators = [
+      "+",
+      "-",
+      "X",
+      "/"
+    ];
     operators = Utils.shuffleArray<String>(operators);
     var op = operators[0];
     states.state.setCurrentOperator(op);
@@ -398,8 +386,7 @@ class HomeRoute extends StatelessWidget {
     states.state.setSecondNumber(num2);
 
     int totalOptions = states.state.gridRows * states.state.gridColumns;
-    List<int> results =
-        Utils.generateNumbersCloseTo(answer, count: totalOptions);
+    List<int> results = Utils.generateNumbersCloseTo(answer, count: totalOptions);
 
     int correctIndex = Utils.getRandomNumber(0, totalOptions - 1);
     results[correctIndex] = answer;
@@ -470,36 +457,23 @@ class HomeRoute extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.sports_score_rounded,
-                size: 64, color: Theme.of(context).colorScheme.primary),
+            Icon(Icons.sports_score_rounded, size: 64, color: Theme.of(context).colorScheme.primary),
             const SizedBox(height: 16),
-            Text("Game Over!",
-                style: GoogleFonts.varelaRound(
-                    fontSize: 24, fontWeight: FontWeight.bold)),
+            Text("Game Over!", style: GoogleFonts.varelaRound(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 24),
             Row(
               children: [
-                Expanded(
-                    child: _buildResultStat("Correct",
-                        states.state.totalTrue.toString(), Colors.green)),
+                Expanded(child: _buildResultStat("Correct", states.state.totalTrue.toString(), Colors.green)),
                 const SizedBox(width: 16),
-                Expanded(
-                    child: _buildResultStat("Wrong",
-                        states.state.totalFalse.toString(), Colors.red)),
+                Expanded(child: _buildResultStat("Wrong", states.state.totalFalse.toString(), Colors.red)),
               ],
             ),
             const SizedBox(height: 16),
             Row(
               children: [
-                Expanded(
-                    child: _buildResultStat(
-                        "Time",
-                        "${states.state.maxTimer - states.state.currentTimer}s",
-                        Colors.blue)),
+                Expanded(child: _buildResultStat("Time", "${states.state.maxTimer - states.state.currentTimer}s", Colors.blue)),
                 const SizedBox(width: 16),
-                Expanded(
-                    child: _buildResultStat("Accuracy",
-                        "${accuracy.toStringAsFixed(1)}%", Colors.orange)),
+                Expanded(child: _buildResultStat("Accuracy", "${accuracy.toStringAsFixed(1)}%", Colors.orange)),
               ],
             ),
             const SizedBox(height: 32),
@@ -512,9 +486,7 @@ class HomeRoute extends StatelessWidget {
                   states.state.setCurrentTimer(0);
                   Navigator.pop(context);
                 },
-                child: Text("Dismiss",
-                    style:
-                        GoogleFonts.varelaRound(fontWeight: FontWeight.bold)),
+                child: Text("Dismiss", style: GoogleFonts.varelaRound(fontWeight: FontWeight.bold)),
               ),
             ),
           ],
@@ -533,12 +505,8 @@ class HomeRoute extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(value,
-              style: GoogleFonts.varelaRound(
-                  fontSize: 20, fontWeight: FontWeight.bold, color: color)),
-          Text(title,
-              style: GoogleFonts.varelaRound(
-                  fontSize: 12, color: color.withValues(alpha: 0.8))),
+          Text(value, style: GoogleFonts.varelaRound(fontSize: 20, fontWeight: FontWeight.bold, color: color)),
+          Text(title, style: GoogleFonts.varelaRound(fontSize: 12, color: color.withValues(alpha: 0.8))),
         ],
       ),
     );
@@ -566,34 +534,13 @@ class HomeRoute extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Game Settings",
-                style: GoogleFonts.varelaRound(
-                    fontSize: 24, fontWeight: FontWeight.bold)),
+            Text("Game Settings", style: GoogleFonts.varelaRound(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 24),
-            _buildSlider(
-                "Min Number",
-                states.state.minNumber.toDouble(),
-                Constants.minNumber.toDouble(),
-                (states.state.maxNumber - 1).toDouble(),
-                (v) => states.state.setMinNumber(v.toInt())),
-            _buildSlider(
-                "Max Number",
-                states.state.maxNumber.toDouble(),
-                (states.state.minNumber + 1).toDouble(),
-                Constants.maxNumber.toDouble(),
-                (v) => states.state.setMaxNumber(v.toInt())),
-            _buildSlider(
-                "Timer",
-                states.state.maxTimer.toDouble(),
-                Constants.minTimer.toDouble(),
-                Constants.maxTimer.toDouble(),
-                (v) => states.state.setMaxTimer(v.toInt())),
-            _buildSlider("Rows", states.state.gridRows.toDouble(), 2, 4,
-                (v) => states.state.setGridRows(v.toInt()),
-                divisions: 2),
-            _buildSlider("Columns", states.state.gridColumns.toDouble(), 2, 4,
-                (v) => states.state.setGridColumns(v.toInt()),
-                divisions: 2),
+            _buildSlider("Min Number", states.state.minNumber.toDouble(), Constants.minNumber.toDouble(), (states.state.maxNumber - 1).toDouble(), (v) => states.state.setMinNumber(v.toInt())),
+            _buildSlider("Max Number", states.state.maxNumber.toDouble(), (states.state.minNumber + 1).toDouble(), Constants.maxNumber.toDouble(), (v) => states.state.setMaxNumber(v.toInt())),
+            _buildSlider("Timer", states.state.maxTimer.toDouble(), Constants.minTimer.toDouble(), Constants.maxTimer.toDouble(), (v) => states.state.setMaxTimer(v.toInt())),
+            _buildSlider("Rows", states.state.gridRows.toDouble(), 2, 4, (v) => states.state.setGridRows(v.toInt()), divisions: 2),
+            _buildSlider("Columns", states.state.gridColumns.toDouble(), 2, 4, (v) => states.state.setGridColumns(v.toInt()), divisions: 2),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
@@ -602,9 +549,7 @@ class HomeRoute extends StatelessWidget {
                   Utils.saveSettings();
                   Navigator.pop(context);
                 },
-                child: Text("Save Settings",
-                    style:
-                        GoogleFonts.varelaRound(fontWeight: FontWeight.bold)),
+                child: Text("Save Settings", style: GoogleFonts.varelaRound(fontWeight: FontWeight.bold)),
               ),
             ),
           ],
@@ -613,23 +558,14 @@ class HomeRoute extends StatelessWidget {
     );
   }
 
-  Widget _buildSlider(String label, double value, double min, double max,
-      Function(double) onChanged,
-      {int? divisions}) {
+  Widget _buildSlider(String label, double value, double min, double max, Function(double) onChanged, {int? divisions}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("$label: ${value.toInt()}",
-              style: GoogleFonts.varelaRound(
-                  fontSize: 16, fontWeight: FontWeight.w600)),
-          Slider(
-              value: value,
-              min: min,
-              max: max,
-              divisions: divisions,
-              onChanged: onChanged),
+          Text("$label: ${value.toInt()}", style: GoogleFonts.varelaRound(fontSize: 16, fontWeight: FontWeight.w600)),
+          Slider(value: value, min: min, max: max, divisions: divisions, onChanged: onChanged),
         ],
       ),
     );
@@ -657,40 +593,28 @@ class HomeRoute extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Theme Settings",
-                style: GoogleFonts.varelaRound(
-                    fontSize: 24, fontWeight: FontWeight.bold)),
+            Text("Theme Settings", style: GoogleFonts.varelaRound(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            Text("Currently using ${_getThemeModeText()} theme",
-                style: GoogleFonts.varelaRound(
-                    fontSize: 14,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant)),
+            Text("Currently using ${_getThemeModeText()} theme", style: GoogleFonts.varelaRound(fontSize: 14, color: Theme.of(context).colorScheme.onSurfaceVariant)),
             const SizedBox(height: 24),
 
             // Theme Mode
-            Text("Theme Mode",
-                style: GoogleFonts.varelaRound(
-                    fontSize: 18, fontWeight: FontWeight.w600)),
+            Text("Theme Mode", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.w600)),
             const SizedBox(height: 12),
             Row(
               children: [
-                _buildThemeModeButton(context, Icons.settings_rounded, 'System',
-                    ThemeMode.system),
+                _buildThemeModeButton(context, Icons.settings_rounded, 'System', ThemeMode.system),
                 const SizedBox(width: 8),
-                _buildThemeModeButton(
-                    context, Icons.wb_sunny_rounded, 'Light', ThemeMode.light),
+                _buildThemeModeButton(context, Icons.wb_sunny_rounded, 'Light', ThemeMode.light),
                 const SizedBox(width: 8),
-                _buildThemeModeButton(
-                    context, Icons.nightlight_round, 'Dark', ThemeMode.dark),
+                _buildThemeModeButton(context, Icons.nightlight_round, 'Dark', ThemeMode.dark),
               ],
             ),
 
             const SizedBox(height: 24),
 
             // Theme Colors
-            Text("Theme Color",
-                style: GoogleFonts.varelaRound(
-                    fontSize: 18, fontWeight: FontWeight.w600)),
+            Text("Theme Color", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.w600)),
             const SizedBox(height: 12),
             Wrap(
               spacing: 12,
@@ -706,9 +630,7 @@ class HomeRoute extends StatelessWidget {
                   Utils.saveSettings();
                   Navigator.pop(context);
                 },
-                child: Text("Apply Theme",
-                    style:
-                        GoogleFonts.varelaRound(fontWeight: FontWeight.bold)),
+                child: Text("Apply Theme", style: GoogleFonts.varelaRound(fontWeight: FontWeight.bold)),
               ),
             ),
           ],
@@ -728,8 +650,7 @@ class HomeRoute extends StatelessWidget {
     }
   }
 
-  Widget _buildThemeModeButton(
-      BuildContext context, IconData icon, String label, ThemeMode mode) {
+  Widget _buildThemeModeButton(BuildContext context, IconData icon, String label, ThemeMode mode) {
     final isSelected = states.state.themeMode == mode;
 
     return Expanded(
@@ -741,31 +662,20 @@ class HomeRoute extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: isSelected
-                  ? Theme.of(context).colorScheme.primaryContainer
-                  : Theme.of(context).colorScheme.surfaceContainer,
+              color: isSelected ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.surfaceContainer,
               borderRadius: BorderRadius.circular(12),
-              border: isSelected
-                  ? Border.all(
-                      color: Theme.of(context).colorScheme.primary, width: 2)
-                  : null,
+              border: isSelected ? Border.all(color: Theme.of(context).colorScheme.primary, width: 2) : null,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon,
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onSurface,
-                    size: 20),
+                Icon(icon, color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface, size: 20),
                 const SizedBox(height: 4),
                 Text(label,
                     style: GoogleFonts.varelaRound(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onSurface,
+                      color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface,
                     )),
               ],
             ),
@@ -801,14 +711,9 @@ class HomeRoute extends StatelessWidget {
             decoration: BoxDecoration(
               color: color,
               shape: BoxShape.circle,
-              border: isSelected
-                  ? Border.all(
-                      color: Theme.of(context).colorScheme.outline, width: 3)
-                  : null,
+              border: isSelected ? Border.all(color: Theme.of(context).colorScheme.outline, width: 3) : null,
             ),
-            child: isSelected
-                ? const Icon(Icons.check_rounded, color: Colors.white, size: 20)
-                : null,
+            child: isSelected ? const Icon(Icons.check_rounded, color: Colors.white, size: 20) : null,
           ),
         ),
       );
@@ -824,37 +729,29 @@ class HomeRoute extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("About MathFinity",
-                style: GoogleFonts.varelaRound(
-                    fontSize: 24, fontWeight: FontWeight.bold)),
+            Text("About MathFinity", style: GoogleFonts.varelaRound(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            Text("Created by Fayaz Bin Salam",
-                style: GoogleFonts.varelaRound(fontSize: 16)),
-            const SizedBox(height: 8),
+            Text("Created by Fayaz Bin Salam", style: GoogleFonts.varelaRound(fontSize: 16)),
+            const SizedBox(height: 16),
+            Text("GitHub Repository:", style: GoogleFonts.varelaRound(fontSize: 14, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 4),
             InkWell(
-              onTap: () =>
-                  launchUrl(Uri.parse("https://github.com/p32929/mathfinity")),
-              child: Text("GitHub Repository",
-                  style: GoogleFonts.varelaRound(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline)),
+              onTap: () => launchUrl(Uri.parse("https://github.com/p32929/mathfinity")),
+              child: Text("https://github.com/p32929/mathfinity", style: GoogleFonts.varelaRound(color: Theme.of(context).colorScheme.primary, decoration: TextDecoration.underline, fontSize: 13)),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
+            Text("Developer Portfolio:", style: GoogleFonts.varelaRound(fontSize: 14, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 4),
             InkWell(
-              onTap: () => launchUrl(Uri.parse("https://p32929.github.io/")),
-              child: Text("Developer Portfolio",
-                  style: GoogleFonts.varelaRound(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline)),
+              onTap: () => launchUrl(Uri.parse("https://p32929.github.io")),
+              child: Text("https://p32929.github.io", style: GoogleFonts.varelaRound(color: Theme.of(context).colorScheme.primary, decoration: TextDecoration.underline, fontSize: 13)),
             ),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text("Close",
-                    style:
-                        GoogleFonts.varelaRound(fontWeight: FontWeight.bold)),
+                child: Text("Close", style: GoogleFonts.varelaRound(fontWeight: FontWeight.bold)),
               ),
             ),
           ],
@@ -873,12 +770,12 @@ class HomeRoute extends StatelessWidget {
         return Colors.red.shade400; // Clean bright red
       }
     }
-    
+
     // Show correct answer during feedback phase
     if (states.state.isChangingEquation && index == states.state.correctAnsIndex && states.state.lastClickedIndex != index) {
       return Colors.green.shade300.withValues(alpha: 0.6); // Subtle correct answer indication
     }
-    
+
     return Theme.of(context).colorScheme.surfaceContainerHighest;
   }
 
@@ -891,12 +788,12 @@ class HomeRoute extends StatelessWidget {
         return Colors.red.shade600; // Clean red border
       }
     }
-    
+
     // Show correct answer during feedback phase
     if (states.state.isChangingEquation && index == states.state.correctAnsIndex && states.state.lastClickedIndex != index) {
       return Colors.green.shade500; // Clean green for correct answer
     }
-    
+
     return Theme.of(context).colorScheme.outline.withValues(alpha: 0.2);
   }
 
@@ -933,7 +830,7 @@ class HomeRoute extends StatelessWidget {
         ];
       }
     }
-    
+
     // Subtle glow for correct answer indicator
     if (states.state.isChangingEquation && index == states.state.correctAnsIndex && states.state.lastClickedIndex != index) {
       return [
@@ -944,7 +841,7 @@ class HomeRoute extends StatelessWidget {
         ),
       ];
     }
-    
+
     return []; // No glow for normal state
   }
 }

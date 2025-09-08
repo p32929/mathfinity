@@ -14,8 +14,7 @@ Timer? gameTimer;
 class HomeRoute extends StatelessWidget {
   const HomeRoute({super.key});
 
-  Widget getInfoWidgets(
-      {String text = "0", IconData icon = Icons.menu, Color? color}) {
+  Widget getInfoWidgets({String text = "0", IconData icon = Icons.menu, Color? color}) {
     const dividerText = '-:-';
     return Expanded(
       child: Row(
@@ -64,12 +63,8 @@ class HomeRoute extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            double itemHeight =
-                (constraints.maxHeight - (states.state.gridRows - 1) * 12) /
-                    states.state.gridRows;
-            double itemWidth =
-                (constraints.maxWidth - (states.state.gridColumns - 1) * 12) /
-                    states.state.gridColumns;
+            double itemHeight = (constraints.maxHeight - (states.state.gridRows - 1) * 12) / states.state.gridRows;
+            double itemWidth = (constraints.maxWidth - (states.state.gridColumns - 1) * 12) / states.state.gridColumns;
 
             return GridView.builder(
               physics: NeverScrollableScrollPhysics(),
@@ -110,9 +105,7 @@ class HomeRoute extends StatelessWidget {
       style: ButtonStyle(
         overlayColor: MaterialStateProperty.resolveWith(
           (states) {
-            return states.contains(MaterialState.pressed)
-                ? getResultButtonRippleColor(index)
-                : null;
+            return states.contains(MaterialState.pressed) ? getResultButtonRippleColor(index) : null;
           },
         ),
         padding: MaterialStateProperty.all(EdgeInsets.zero),
@@ -253,7 +246,7 @@ class HomeRoute extends StatelessWidget {
 
   void onPersonClicked() {
     var sourceCodeLink = "https://github.com/p32929/mathfinity";
-    var portfolioLink = "https://p32929.github.io/";
+    var portfolioLink = "https://p32929.github.io";
 
     final Uri sourceCodeUri = Uri.parse(sourceCodeLink);
     final Uri portfolioUri = Uri.parse(portfolioLink);
@@ -271,8 +264,7 @@ class HomeRoute extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Created by Fayaz Bin Salam"),
-              Text(
-                  "This is an Open Source project. Source code can be found at:  "),
+              Text("This is an Open Source project. Source code can be found at:  "),
               InkWell(
                 onTap: () {
                   launchUrl(sourceCodeUri);
@@ -324,12 +316,9 @@ class HomeRoute extends StatelessWidget {
   void showResultDialog() {
     double accuracy;
     if (states.state.totalFalse != 0) {
-      accuracy = (states.state.totalTrue /
-              (states.state.totalTrue + states.state.totalFalse)) *
-          100;
+      accuracy = (states.state.totalTrue / (states.state.totalTrue + states.state.totalFalse)) * 100;
     } else {
-      accuracy =
-          states.state.totalTrue + states.state.totalFalse == 0 ? 0 : 100.0;
+      accuracy = states.state.totalTrue + states.state.totalFalse == 0 ? 0 : 100.0;
     }
 
     OneContext.instance.showDialog(
@@ -420,7 +409,12 @@ class HomeRoute extends StatelessWidget {
       num2 = temp;
     }
 
-    var operators = ["+", "-", "X", "/"];
+    var operators = [
+      "+",
+      "-",
+      "X",
+      "/"
+    ];
     operators = Utils.shuffleArray<String>(operators);
     var op0 = operators[0];
     states.state.setCurrentOperator(op0);
@@ -439,8 +433,7 @@ class HomeRoute extends StatelessWidget {
     states.state.setSecondNumber(num2);
 
     int totalOptions = states.state.gridRows * states.state.gridColumns;
-    List<int> results =
-        Utils.generateNumbersCloseTo(answer, count: totalOptions);
+    List<int> results = Utils.generateNumbersCloseTo(answer, count: totalOptions);
     operators = Utils.shuffleArray<String>(operators);
 
     int correctIndex = Utils.getRandomNumber(0, totalOptions - 1);
@@ -491,22 +484,14 @@ class HomeRoute extends StatelessWidget {
               onPressed: states.state.isGameRunning ? null : onPersonClicked,
               icon: Icon(
                 Icons.account_circle,
-                color: states.state.isGameRunning
-                    ? Colors.grey
-                    : Theme.of(OneContext.instance.context!)
-                        .colorScheme
-                        .primary,
+                color: states.state.isGameRunning ? Colors.grey : Theme.of(OneContext.instance.context!).colorScheme.primary,
               ),
             ),
             IconButton(
               onPressed: states.state.isGameRunning ? null : onSettingsClicked,
               icon: Icon(
                 Icons.settings,
-                color: states.state.isGameRunning
-                    ? Colors.grey
-                    : Theme.of(OneContext.instance.context!)
-                        .colorScheme
-                        .primary,
+                color: states.state.isGameRunning ? Colors.grey : Theme.of(OneContext.instance.context!).colorScheme.primary,
               ),
             ),
           ],
@@ -519,23 +504,17 @@ class HomeRoute extends StatelessWidget {
               children: [
                 getInfoWidgets(
                   icon: Icons.check_circle,
-                  color: Theme.of(OneContext.instance.context!)
-                      .colorScheme
-                      .primary,
+                  color: Theme.of(OneContext.instance.context!).colorScheme.primary,
                   text: states.state.totalTrue.toString(),
                 ),
                 getInfoWidgets(
-                  icon: states.state.currentTimer % 2 == 0
-                      ? Icons.hourglass_bottom
-                      : Icons.hourglass_top,
-                  color:
-                      Theme.of(OneContext.instance.context!).colorScheme.error,
+                  icon: states.state.currentTimer % 2 == 0 ? Icons.hourglass_bottom : Icons.hourglass_top,
+                  color: Theme.of(OneContext.instance.context!).colorScheme.error,
                   text: states.state.currentTimer.toString(),
                 ),
                 getInfoWidgets(
                   icon: Icons.cancel,
-                  color:
-                      Theme.of(OneContext.instance.context!).colorScheme.error,
+                  color: Theme.of(OneContext.instance.context!).colorScheme.error,
                   text: states.state.totalFalse.toString(),
                 ),
               ],
@@ -584,8 +563,7 @@ class StartButton extends StatefulWidget {
   _StartButtonState createState() => _StartButtonState();
 }
 
-class _StartButtonState extends State<StartButton>
-    with SingleTickerProviderStateMixin {
+class _StartButtonState extends State<StartButton> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -620,13 +598,11 @@ class _StartButtonState extends State<StartButton>
               builder: (context, child) {
                 return Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                        36.0), // Match the button's radius
+                    borderRadius: BorderRadius.circular(36.0), // Match the button's radius
                     boxShadow: [
                       BoxShadow(
                         color: widget.isGameRunning
-                            ? Colors
-                                .transparent // No glow when the game is running
+                            ? Colors.transparent // No glow when the game is running
                             : Theme.of(context).colorScheme.primary,
                         blurRadius: _animation.value,
                         spreadRadius: _animation.value / 2,
@@ -635,9 +611,7 @@ class _StartButtonState extends State<StartButton>
                   ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: widget.isGameRunning
-                          ? Colors.red
-                          : Theme.of(context).colorScheme.primary,
+                      foregroundColor: widget.isGameRunning ? Colors.red : Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.all(16.0),
                     ),
                     onPressed: widget.onStartStopClicked,
