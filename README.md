@@ -2,17 +2,25 @@
 
 Play with math infinitely
 
-# Screen Record
+# Screenshots
 
-https://github.com/p32929/mathfinity/assets/6418354/33594f4e-2b5d-4105-8f23-7f8bdc1a7286
+<div align="center">
+  <img width="280" src="https://github.com/user-attachments/assets/fc06f26a-a4f8-41da-938c-53011d1fc0e2" alt="Screenshot 1" />
+  &nbsp;&nbsp;&nbsp;
+  <img width="280" src="https://github.com/user-attachments/assets/d3a54adf-9fd7-4e28-8997-27058276abd3" alt="Screenshot 2" />
+  &nbsp;&nbsp;&nbsp;
+  <img width="280" src="https://github.com/user-attachments/assets/31023a71-cf5f-4611-a172-631a38411e1d" alt="Screenshot 3" />
+</div>
 
-# Screenshot
+<br>
 
-<img src="https://github.com/p32929/mathfinity/assets/6418354/ead028a1-7b4b-4450-92cb-9c0be01d9560" alt="Screenshot_20240222-195902" width="200">
-
-<img src="https://github.com/p32929/mathfinity/assets/6418354/bd6ac25f-cdd4-4553-b708-9e5e83614fee" alt="Screenshot_20240222-195902" width="200">
-
-<img src="https://github.com/p32929/mathfinity/assets/6418354/a0af677d-9909-4881-af3b-99605d300314" alt="Screenshot_20240222-195902" width="200">
+<div align="center">
+  <img width="280" src="https://github.com/user-attachments/assets/7f569068-4cde-424b-8ef0-65caa82ef08a" alt="Screenshot 4" />
+  &nbsp;&nbsp;&nbsp;
+  <img width="280" src="https://github.com/user-attachments/assets/7eebc058-23ce-43fe-b203-a89b14d4eb41" alt="Screenshot 5" />
+  &nbsp;&nbsp;&nbsp;
+  <img width="280" src="https://github.com/user-attachments/assets/f8321a19-89da-4553-9fca-8c2e718ba51d" alt="Screenshot 6" />
+</div>
 
 # Todos
 

@@ -46,6 +46,6 @@ app.*.map.json
 *.exe
 
 /node_modules
-yarn.lock
+# yarn.lock
 
 /.serena
