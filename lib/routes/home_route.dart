@@ -216,15 +216,13 @@ class HomeRoute extends StatelessWidget {
     
     return Column(
       children: List.generate(rows, (rowIndex) {
-        print('DEBUG: Generating row $rowIndex');
         return Expanded(
           child: Row(
             children: List.generate(columns, (colIndex) {
               int index = rowIndex * columns + colIndex;
-              print('DEBUG: Row $rowIndex, Col $colIndex, Index $index');
               return Expanded(
                 child: Container(
-                  margin: const EdgeInsets.all(1),
+                  margin: const EdgeInsets.all(4),
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
@@ -232,13 +230,10 @@ class HomeRoute extends StatelessWidget {
                       onTap: () => _onNumberTap(index),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                          color: _getGridItemColor(context, index),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .outline
-                                .withValues(alpha: 0.2),
+                            color: _getGridItemBorderColor(context, index),
                           ),
                         ),
                         child: Center(
@@ -291,6 +286,7 @@ class HomeRoute extends StatelessWidget {
   // Game Logic
   void _onNumberTap(int index) async {
     if (states.state.isGameRunning && !states.state.isChangingEquation) {
+      states.state.setLastClickedIndex(index);
       states.state.setChangingEquation(true);
 
       if (states.state.correctAnsIndex == index) {
@@ -299,7 +295,8 @@ class HomeRoute extends StatelessWidget {
         states.state.setTotalFalse(states.state.totalFalse + 1);
       }
 
-      await Future.delayed(const Duration(milliseconds: 300));
+      await Future.delayed(const Duration(milliseconds: 600));
+      states.state.setLastClickedIndex(null);
       _generateNewQuestion();
       states.state.setChangingEquation(false);
     }
@@ -803,5 +800,42 @@ class HomeRoute extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Grid item styling methods
+  Color _getGridItemColor(BuildContext context, int index) {
+    // Show feedback during answer selection
+    if (states.state.isChangingEquation && states.state.lastClickedIndex == index) {
+      if (index == states.state.correctAnsIndex) {
+        return Colors.green.withValues(alpha: 0.8); // Much brighter green
+      } else {
+        return Colors.red.withValues(alpha: 0.8); // Much brighter red
+      }
+    }
+    
+    // Show correct answer during feedback phase
+    if (states.state.isChangingEquation && index == states.state.correctAnsIndex && states.state.lastClickedIndex != index) {
+      return Colors.green.withValues(alpha: 0.6); // Brighter correct answer indication
+    }
+    
+    return Theme.of(context).colorScheme.surfaceContainerHighest;
+  }
+
+  Color _getGridItemBorderColor(BuildContext context, int index) {
+    // Show feedback during answer selection
+    if (states.state.isChangingEquation && states.state.lastClickedIndex == index) {
+      if (index == states.state.correctAnsIndex) {
+        return Colors.green; // Solid bright green border
+      } else {
+        return Colors.red; // Solid bright red border
+      }
+    }
+    
+    // Show correct answer during feedback phase
+    if (states.state.isChangingEquation && index == states.state.correctAnsIndex && states.state.lastClickedIndex != index) {
+      return Colors.green.withValues(alpha: 0.8); // Bright green for correct answer
+    }
+    
+    return Theme.of(context).colorScheme.outline.withValues(alpha: 0.2);
   }
 }

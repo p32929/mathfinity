@@ -16,6 +16,7 @@ class States {
 
   String currentOperator = "X";
   int correctAnsIndex = -1;
+  int? lastClickedIndex;
   int gridColumns = 4;
   int gridRows = 4;
 
@@ -85,6 +86,11 @@ class States {
 
   setCorrectAnsIndex(int num) {
     correctAnsIndex = num;
+    states.notify();
+  }
+
+  setLastClickedIndex(int? index) {
+    lastClickedIndex = index;
     states.notify();
   }
 
