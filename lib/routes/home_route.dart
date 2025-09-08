@@ -262,26 +262,74 @@ class HomeRoute extends StatelessWidget {
 
 
   Widget _buildStartButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 56,
-      child: FilledButton(
-        onPressed: _onStartStop,
-        style: FilledButton.styleFrom(
-          backgroundColor: states.state.isGameRunning
-              ? Theme.of(context).colorScheme.error
-              : Theme.of(context).colorScheme.primary,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        ),
-        child: Text(
-          states.state.isGameRunning ? "STOP GAME" : "START GAME",
-          style: GoogleFonts.varelaRound(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+    return TweenAnimationBuilder<double>(
+      duration: const Duration(milliseconds: 800),
+      tween: Tween<double>(
+        begin: 1.0,
+        end: states.state.shouldAnimateStartButton ? 1.1 : 1.0,
       ),
+      curve: Curves.elasticOut,
+      builder: (context, scale, child) {
+        return Transform.scale(
+          scale: scale,
+          child: Container(
+            width: double.infinity,
+            height: 56,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: states.state.shouldAnimateStartButton
+                  ? [
+                      BoxShadow(
+                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
+                        blurRadius: 15,
+                        spreadRadius: 3,
+                      ),
+                    ]
+                  : [],
+            ),
+            child: FilledButton(
+              onPressed: _onStartStop,
+              style: FilledButton.styleFrom(
+                backgroundColor: states.state.isGameRunning
+                    ? Theme.of(context).colorScheme.error
+                    : states.state.shouldAnimateStartButton
+                        ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.9)
+                        : Theme.of(context).colorScheme.primary,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (states.state.shouldAnimateStartButton)
+                    TweenAnimationBuilder<double>(
+                      duration: const Duration(milliseconds: 1000),
+                      tween: Tween<double>(begin: 0.0, end: 1.0),
+                      curve: Curves.bounceOut,
+                      builder: (context, bounceValue, child) {
+                        return Transform.scale(
+                          scale: 0.8 + (bounceValue * 0.4),
+                          child: Icon(
+                            Icons.play_arrow_rounded,
+                            size: 24,
+                            color: Colors.white,
+                          ),
+                        );
+                      },
+                    ),
+                  if (states.state.shouldAnimateStartButton) const SizedBox(width: 8),
+                  Text(
+                    states.state.isGameRunning ? "STOP GAME" : "START GAME",
+                    style: GoogleFonts.varelaRound(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -301,7 +349,17 @@ class HomeRoute extends StatelessWidget {
       states.state.setLastClickedIndex(null);
       _generateNewQuestion();
       states.state.setChangingEquation(false);
+    } else if (!states.state.isGameRunning) {
+      // User clicked grid before starting game - animate start button to guide them
+      _animateStartButtonToGuideUser();
     }
+  }
+
+  void _animateStartButtonToGuideUser() async {
+    // Trigger animation for 2 seconds to guide user
+    states.state.setShouldAnimateStartButton(true);
+    await Future.delayed(const Duration(seconds: 2));
+    states.state.setShouldAnimateStartButton(false);
   }
 
   void _generateNewQuestion() {
@@ -374,6 +432,7 @@ class HomeRoute extends StatelessWidget {
 
   void _startGame() {
     states.state.setGameRunning(true);
+    states.state.setShouldAnimateStartButton(false); // Stop animation when game starts
     states.state.setCurrentTimer(states.state.maxTimer);
 
     _generateNewQuestion();

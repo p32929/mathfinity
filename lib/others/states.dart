@@ -22,6 +22,7 @@ class States {
 
   bool isGameRunning = false;
   bool isChangingEquation = false;
+  bool shouldAnimateStartButton = false;
 
   var results = List.generate(16, (index) => index + 1);
 
@@ -81,6 +82,11 @@ class States {
 
   setChangingEquation(bool b) {
     isChangingEquation = b;
+    states.notify();
+  }
+
+  setShouldAnimateStartButton(bool b) {
+    shouldAnimateStartButton = b;
     states.notify();
   }
 
