@@ -22,7 +22,7 @@ class States {
   bool isGameRunning = false;
   bool isChangingEquation = false;
 
-  var results = [];
+  var results = List.generate(16, (index) => index + 1);
 
   // Theme settings
   ThemeMode themeMode = ThemeMode.system;

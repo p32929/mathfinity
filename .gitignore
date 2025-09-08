@@ -47,3 +47,5 @@ app.*.map.json
 
 /node_modules
 yarn.lock
+
+/.serena

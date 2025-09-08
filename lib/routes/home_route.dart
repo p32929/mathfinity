@@ -71,28 +71,37 @@ class HomeRoute extends StatelessWidget {
           ],
         ),
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                // Stats Row
-                _buildStatsRow(context),
-                const SizedBox(height: 20),
+          child: Column(
+            children: [
+              // Stats Row
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                child: _buildStatsRow(context),
+              ),
+              const SizedBox(height: 12),
 
-                // Equation
-                _buildEquation(context),
-                const SizedBox(height: 20),
+              // Equation
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _buildEquation(context),
+              ),
+              const SizedBox(height: 12),
 
-                // Numbers Grid (This will take most space)
-                Expanded(
+              // Numbers Grid - Expanded to fill available space
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: _buildNumbersGrid(context),
                 ),
-                const SizedBox(height: 20),
+              ),
+              const SizedBox(height: 12),
 
-                // Start Button
-                _buildStartButton(context),
-              ],
-            ),
+              // Start Button
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: _buildStartButton(context),
+              ),
+            ],
           ),
         ),
       ),
@@ -190,53 +199,70 @@ class HomeRoute extends StatelessWidget {
   }
 
   Widget _buildNumbersGrid(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: states.state.gridColumns,
-            childAspectRatio: 1.0,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-          ),
-          itemCount: states.state.gridRows * states.state.gridColumns,
-          itemBuilder: (context, index) {
-            return Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(16),
-                onTap: () => _onNumberTap(index),
+    int columns = states.state.gridColumns;
+    int rows = states.state.gridRows;
+    int totalItems = rows * columns;
+    
+    // Ensure results array has enough items
+    List<int> displayNumbers = [];
+    if (states.state.results.length < totalItems) {
+      // If not enough results, generate sequential numbers
+      for (int i = 0; i < totalItems; i++) {
+        displayNumbers.add(i + 1);
+      }
+    } else {
+      displayNumbers = List<int>.from(states.state.results.take(totalItems));
+    }
+    
+    return Column(
+      children: List.generate(rows, (rowIndex) {
+        print('DEBUG: Generating row $rowIndex');
+        return Expanded(
+          child: Row(
+            children: List.generate(columns, (colIndex) {
+              int index = rowIndex * columns + colIndex;
+              print('DEBUG: Row $rowIndex, Col $colIndex, Index $index');
+              return Expanded(
                 child: Container(
-                  decoration: BoxDecoration(
-                    color:
-                        Theme.of(context).colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .outline
-                          .withValues(alpha: 0.2),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      states.state.results[index].toString(),
-                      style: GoogleFonts.varelaRound(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onSurface,
+                  margin: const EdgeInsets.all(1),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () => _onNumberTap(index),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .outline
+                                .withValues(alpha: 0.2),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            displayNumbers[index].toString(),
+                            style: GoogleFonts.varelaRound(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            }),
+          ),
         );
-      },
+      }),
     );
   }
+
 
   Widget _buildStartButton(BuildContext context) {
     return SizedBox(
