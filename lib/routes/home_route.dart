@@ -234,7 +234,9 @@ class HomeRoute extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                             color: _getGridItemBorderColor(context, index),
+                            width: 2,
                           ),
+                          boxShadow: _getGridItemGlow(context, index),
                         ),
                         child: Center(
                           child: Text(
@@ -451,7 +453,7 @@ class HomeRoute extends StatelessWidget {
                   states.state.setCurrentTimer(0);
                   Navigator.pop(context);
                 },
-                child: Text("Play Again",
+                child: Text("Dismiss",
                     style:
                         GoogleFonts.varelaRound(fontWeight: FontWeight.bold)),
               ),
@@ -807,15 +809,15 @@ class HomeRoute extends StatelessWidget {
     // Show feedback during answer selection
     if (states.state.isChangingEquation && states.state.lastClickedIndex == index) {
       if (index == states.state.correctAnsIndex) {
-        return Colors.green.withValues(alpha: 0.8); // Much brighter green
+        return Colors.green.shade400; // Clean bright green
       } else {
-        return Colors.red.withValues(alpha: 0.8); // Much brighter red
+        return Colors.red.shade400; // Clean bright red
       }
     }
     
     // Show correct answer during feedback phase
     if (states.state.isChangingEquation && index == states.state.correctAnsIndex && states.state.lastClickedIndex != index) {
-      return Colors.green.withValues(alpha: 0.6); // Brighter correct answer indication
+      return Colors.green.shade300.withValues(alpha: 0.6); // Subtle correct answer indication
     }
     
     return Theme.of(context).colorScheme.surfaceContainerHighest;
@@ -825,17 +827,65 @@ class HomeRoute extends StatelessWidget {
     // Show feedback during answer selection
     if (states.state.isChangingEquation && states.state.lastClickedIndex == index) {
       if (index == states.state.correctAnsIndex) {
-        return Colors.green; // Solid bright green border
+        return Colors.green.shade600; // Clean green border
       } else {
-        return Colors.red; // Solid bright red border
+        return Colors.red.shade600; // Clean red border
       }
     }
     
     // Show correct answer during feedback phase
     if (states.state.isChangingEquation && index == states.state.correctAnsIndex && states.state.lastClickedIndex != index) {
-      return Colors.green.withValues(alpha: 0.8); // Bright green for correct answer
+      return Colors.green.shade500; // Clean green for correct answer
     }
     
     return Theme.of(context).colorScheme.outline.withValues(alpha: 0.2);
+  }
+
+  List<BoxShadow> _getGridItemGlow(BuildContext context, int index) {
+    // Clean elegant glow during feedback
+    if (states.state.isChangingEquation && states.state.lastClickedIndex == index) {
+      if (index == states.state.correctAnsIndex) {
+        return [
+          // Clean green glow - elegant and bright
+          BoxShadow(
+            color: Colors.green.withValues(alpha: 0.6),
+            blurRadius: 16,
+            spreadRadius: 2,
+          ),
+          BoxShadow(
+            color: Colors.green.withValues(alpha: 0.3),
+            blurRadius: 24,
+            spreadRadius: 4,
+          ),
+        ];
+      } else {
+        return [
+          // Clean red glow - elegant and bright
+          BoxShadow(
+            color: Colors.red.withValues(alpha: 0.6),
+            blurRadius: 16,
+            spreadRadius: 2,
+          ),
+          BoxShadow(
+            color: Colors.red.withValues(alpha: 0.3),
+            blurRadius: 24,
+            spreadRadius: 4,
+          ),
+        ];
+      }
+    }
+    
+    // Subtle glow for correct answer indicator
+    if (states.state.isChangingEquation && index == states.state.correctAnsIndex && states.state.lastClickedIndex != index) {
+      return [
+        BoxShadow(
+          color: Colors.green.withValues(alpha: 0.4),
+          blurRadius: 12,
+          spreadRadius: 1,
+        ),
+      ];
+    }
+    
+    return []; // No glow for normal state
   }
 }
