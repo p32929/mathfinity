@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:mathfinity/others/constants.dart';
 import 'package:mathfinity/others/states.dart';
 import 'package:prefs/prefs.dart';
@@ -58,6 +59,18 @@ class Utils {
       states.state.setGridColumns(gridColumns);
     }
 
+    // Load theme settings
+    int themeModeIndex = Prefs.getInt(Constants.THEME_MODE_SP);
+    int seedColorValue = Prefs.getInt(Constants.SEED_COLOR_SP);
+
+    if (themeModeIndex != 0) {
+      states.state.setThemeMode(ThemeMode.values[themeModeIndex]);
+    }
+
+    if (seedColorValue != 0) {
+      states.state.setSeedColor(Color(seedColorValue));
+    }
+
     states.state.setResults(
       getInitNumberList(
         states.state.gridColumns * states.state.gridRows,
@@ -71,6 +84,8 @@ class Utils {
     Prefs.setInt(Constants.MAX_TIMER_SP, states.state.maxTimer);
     Prefs.setInt(Constants.NUM_OF_ROWS_SP, states.state.gridRows);
     Prefs.setInt(Constants.NUM_OF_COLS_SP, states.state.gridColumns);
+    Prefs.setInt(Constants.THEME_MODE_SP, states.state.themeMode.index);
+    Prefs.setInt(Constants.SEED_COLOR_SP, states.state.seedColor.toARGB32());
   }
 
   static List<int> generateNumbersCloseTo(int answer, {int count = 4}) {

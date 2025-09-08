@@ -42,8 +42,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
   }
 }
 
-// Fictitious brand color.
-const _brandBlue = Colors.blue;
+// Get brand color from states
+Color get _brandColor => states.state.seedColor;
 
 CustomColors lightCustomColors = const CustomColors(danger: Color(0xFFE53935));
 CustomColors darkCustomColors = const CustomColors(danger: Color(0xFFEF9A9A));
@@ -68,22 +68,23 @@ class MyApp extends StatelessWidget {
               // (Optional) Customize the scheme as desired. For example, one might
               // want to use a brand color to override the dynamic [ColorScheme.secondary].
               lightColorScheme =
-                  lightColorScheme.copyWith(secondary: _brandBlue);
+                  lightColorScheme.copyWith(secondary: _brandColor);
               // (Optional) If applicable, harmonize custom colors.
               lightCustomColors =
                   lightCustomColors.harmonized(lightColorScheme);
 
               // Repeat for the dark color scheme.
               darkColorScheme = darkDynamic.harmonized();
-              darkColorScheme = darkColorScheme.copyWith(secondary: _brandBlue);
+              darkColorScheme =
+                  darkColorScheme.copyWith(secondary: _brandColor);
               darkCustomColors = darkCustomColors.harmonized(darkColorScheme);
             } else {
               // Otherwise, use fallback schemes.
               lightColorScheme = ColorScheme.fromSeed(
-                seedColor: _brandBlue,
+                seedColor: _brandColor,
               );
               darkColorScheme = ColorScheme.fromSeed(
-                seedColor: _brandBlue,
+                seedColor: _brandColor,
                 brightness: Brightness.dark,
               );
             }
@@ -107,7 +108,7 @@ class MyApp extends StatelessWidget {
               builder: OneContext().builder,
               navigatorKey: OneContext().key,
               debugShowCheckedModeBanner: false,
-              themeMode: ThemeMode.system,
+              themeMode: states.state.themeMode,
             );
           },
         );

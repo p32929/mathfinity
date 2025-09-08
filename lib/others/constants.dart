@@ -6,4 +6,6 @@ class Constants {
   static const String MAX_TIMER_SP = "MAX_TIMER_SP";
   static const String NUM_OF_ROWS_SP = "NUM_OF_ROWS_SP";
   static const String NUM_OF_COLS_SP = "NUM_OF_COLS_SP";
+  static const String THEME_MODE_SP = "THEME_MODE_SP";
+  static const String SEED_COLOR_SP = "SEED_COLOR_SP";
 }

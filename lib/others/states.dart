@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mathfinity/others/constants.dart';
 import 'package:mathfinity/others/utils.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
@@ -22,6 +23,10 @@ class States {
   bool isChangingEquation = false;
 
   var results = [];
+
+  // Theme settings
+  ThemeMode themeMode = ThemeMode.system;
+  Color seedColor = Colors.teal;
 
   setMinNumber(int num) {
     minNumber = num;
@@ -105,6 +110,16 @@ class States {
 
   setResults(List<int> results) {
     this.results = results;
+    states.notify();
+  }
+
+  setThemeMode(ThemeMode mode) {
+    themeMode = mode;
+    states.notify();
+  }
+
+  setSeedColor(Color color) {
+    seedColor = color;
     states.notify();
   }
 }
