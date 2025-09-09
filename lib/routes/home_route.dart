@@ -345,7 +345,27 @@ class HomeRoute extends StatelessWidget {
     states.state.setShouldAnimateStartButton(false);
   }
 
-  void _generateNewQuestion() {
+  void _generateNewQuestion([int attempts = 0]) {
+    // Prevent infinite recursion - use fallback after 10 attempts
+    if (attempts > 10) {
+      // Fallback: generate a simple valid question
+      int num1 = 15;
+      int num2 = 5;
+      var op = states.state.getNextOperator();
+      states.state.setCurrentOperator(op);
+      states.state.setFirstNumber(num1);
+      states.state.setSecondNumber(num2);
+      
+      int totalOptions = states.state.gridRows * states.state.gridColumns;
+      var answer = _calculateAnswer(num1, num2, op);
+      List<int> results = Utils.generateNumbersCloseTo(answer, count: totalOptions);
+      int correctIndex = Utils.getRandomNumber(0, totalOptions - 1);
+      results[correctIndex] = answer;
+      states.state.setCorrectAnsIndex(correctIndex);
+      states.state.setResults(results);
+      return;
+    }
+
     var numbersArray = Utils.generateNumberArray(
       states.state.minNumber,
       states.state.maxNumber,
@@ -361,26 +381,27 @@ class HomeRoute extends StatelessWidget {
       num2 = temp;
     }
 
-    var operators = [
-      "+",
-      "-",
-      "X",
-      "/"
-    ];
-    operators = Utils.shuffleArray<String>(operators);
-    var op = operators[0];
-    states.state.setCurrentOperator(op);
+    // Get an operator from the shuffled pool
+    var op = states.state.getNextOperator();
 
     if (op == "/") {
       int mod = num1 % num2;
       num1 -= mod;
+      // Ensure no division by zero
+      if (num2 == 0) num2 = 1;
     }
 
     var answer = _calculateAnswer(num1, num2, op);
 
-    if (num1 == num2 || answer < 3) {
-      return _generateNewQuestion();
+    // More lenient validation to reduce recursion
+    if (num1 == num2 || answer < 1 || answer > 500) {
+      // Put the operator back since we're not using this question
+      states.state.putBackOperator(op);
+      return _generateNewQuestion(attempts + 1);
     }
+
+    // Only set the operator if we're keeping this question
+    states.state.setCurrentOperator(op);
 
     states.state.setFirstNumber(num1);
     states.state.setSecondNumber(num2);
@@ -422,6 +443,9 @@ class HomeRoute extends StatelessWidget {
     states.state.setShouldAnimateStartButton(false); // Stop animation when game starts
     states.state.setCurrentTimer(states.state.maxTimer);
 
+    // Initialize the operator pool for a new game
+    states.state.initializeOperatorPool();
+
     _generateNewQuestion();
 
     gameTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -454,13 +478,14 @@ class HomeRoute extends StatelessWidget {
       enableDrag: false,
       builder: (context) => Container(
         padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.sports_score_rounded, size: 64, color: Theme.of(context).colorScheme.primary),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+            Icon(Icons.sports_score_rounded, size: 48, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(height: 12),
+            Text("Game Over!", style: GoogleFonts.varelaRound(fontSize: 22, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            Text("Game Over!", style: GoogleFonts.varelaRound(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 24),
             Row(
               children: [
                 Expanded(child: _buildResultStat("Correct", states.state.totalTrue.toString(), Colors.green)),
@@ -476,7 +501,7 @@ class HomeRoute extends StatelessWidget {
                 Expanded(child: _buildResultStat("Accuracy", "${accuracy.toStringAsFixed(1)}%", Colors.orange)),
               ],
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               height: 56,
@@ -495,6 +520,7 @@ class HomeRoute extends StatelessWidget {
               ),
             ),
           ],
+          ),
         ),
       ),
     );

@@ -26,6 +26,9 @@ class States {
 
   var results = List.generate(16, (index) => index + 1);
 
+  // Shuffled arithmetic signs pool
+  List<String> operatorPool = [];
+  
   // Theme settings
   ThemeMode themeMode = ThemeMode.system;
   Color seedColor = Colors.teal;
@@ -133,6 +136,28 @@ class States {
   setSeedColor(Color color) {
     seedColor = color;
     states.notify();
+  }
+
+  // Operator pool management methods
+  void _refillOperatorPool() {
+    operatorPool = ["+", "-", "X", "/"];
+    operatorPool.shuffle();
+  }
+
+  void initializeOperatorPool() {
+    operatorPool.clear();
+    _refillOperatorPool();
+  }
+
+  String getNextOperator() {
+    if (operatorPool.isEmpty) {
+      _refillOperatorPool();
+    }
+    return operatorPool.removeLast();
+  }
+
+  void putBackOperator(String operator) {
+    operatorPool.add(operator);
   }
 }
 
