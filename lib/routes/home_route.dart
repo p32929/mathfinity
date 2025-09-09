@@ -542,9 +542,18 @@ class HomeRoute extends StatelessWidget {
 
     showModalBottomSheet(
       context: OneContext().context!,
-      isDismissible: false,
-      enableDrag: false,
-      builder: (context) => Container(
+      isDismissible: true,
+      enableDrag: true,
+      builder: (context) => PopScope(
+        onPopInvokedWithResult: (didPop, result) {
+          // Reset scores whenever dialog is dismissed in any way
+          if (didPop) {
+            states.state.setTotalTrue(0);
+            states.state.setTotalFalse(0);
+            states.state.setCurrentTimer(0);
+          }
+        },
+        child: Container(
         padding: const EdgeInsets.all(24),
         child: SingleChildScrollView(
           child: Column(
@@ -574,12 +583,7 @@ class HomeRoute extends StatelessWidget {
               width: double.infinity,
               height: 56,
               child: FilledButton(
-                onPressed: () {
-                  states.state.setTotalTrue(0);
-                  states.state.setTotalFalse(0);
-                  states.state.setCurrentTimer(0);
-                  Navigator.pop(context);
-                },
+                onPressed: () => Navigator.pop(context),
                 style: FilledButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -589,6 +593,7 @@ class HomeRoute extends StatelessWidget {
             ),
           ],
           ),
+        ),
         ),
       ),
     );
