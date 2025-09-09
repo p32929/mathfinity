@@ -348,10 +348,42 @@ class HomeRoute extends StatelessWidget {
   void _generateNewQuestion([int attempts = 0]) {
     // Prevent infinite recursion - use fallback after 10 attempts
     if (attempts > 10) {
-      // Fallback: generate a simple valid question
-      int num1 = 15;
-      int num2 = 5;
+      // Fallback: generate a valid question within the user's range
+      int minNum = states.state.minNumber;
+      int maxNum = states.state.maxNumber;
+      
+      // Find two numbers within range that work for division
+      int num1 = minNum + ((maxNum - minNum) ~/ 2);
+      int num2 = minNum;
+      
       var op = states.state.getNextOperator();
+      
+      // Adjust numbers for division to ensure clean result > 1
+      if (op == "/") {
+        bool foundValidDivision = false;
+        // Find a divisor within range that creates a clean division with result > 1
+        for (int divisor = minNum; divisor <= maxNum && !foundValidDivision; divisor++) {
+          if (divisor != 0) {
+            for (int dividend = minNum; dividend <= maxNum && !foundValidDivision; dividend++) {
+              if (dividend != divisor && dividend % divisor == 0) {
+                int result = dividend ~/ divisor;
+                if (result > 1 && result <= 10) {
+                  num1 = dividend;
+                  num2 = divisor;
+                  foundValidDivision = true;
+                }
+              }
+            }
+          }
+        }
+        
+        // If no valid division found, skip division for this attempt
+        if (!foundValidDivision) {
+          // Don't use division, let it fall through to use +, -, or * instead
+          op = ['+', '-', 'X'][Utils.getRandomNumber(0, 2)];
+        }
+      }
+      
       states.state.setCurrentOperator(op);
       states.state.setFirstNumber(num1);
       states.state.setSecondNumber(num2);
@@ -385,16 +417,52 @@ class HomeRoute extends StatelessWidget {
     var op = states.state.getNextOperator();
 
     if (op == "/") {
-      int mod = num1 % num2;
-      num1 -= mod;
-      // Ensure no division by zero
-      if (num2 == 0) num2 = 1;
+      // For division, we need both numbers in range AND result > 1
+      // Strategy: find two numbers in range where num1 = num2 * result (result > 1)
+      bool foundValidDivision = false;
+      
+      // Try to find a valid division within the range
+      // Look for combinations where both numbers are in range and result > 1
+      for (int divisor = states.state.minNumber; divisor <= states.state.maxNumber && !foundValidDivision; divisor++) {
+        if (divisor == 0) continue;
+        
+        for (int dividend = states.state.minNumber; dividend <= states.state.maxNumber && !foundValidDivision; dividend++) {
+          if (dividend != divisor && dividend % divisor == 0) {
+            int result = dividend ~/ divisor;
+            if (result > 1 && result <= 20) { // Reasonable result range
+              num1 = dividend;
+              num2 = divisor;
+              foundValidDivision = true;
+            }
+          }
+        }
+      }
+      
+      // If we couldn't find a valid division in range, fallback
+      if (!foundValidDivision) {
+        // Put the operator back and try again with a different operator
+        states.state.putBackOperator(op);
+        return _generateNewQuestion(attempts + 1);
+      }
     }
 
     var answer = _calculateAnswer(num1, num2, op);
 
-    // More lenient validation to reduce recursion
-    if (num1 == num2 || answer < 1 || answer > 500) {
+    // Validate that both numbers are within user's range and result is valid
+    bool isValidQuestion = true;
+    
+    if (num1 == num2 || answer < 1 || answer > 500 || 
+        num1 < states.state.minNumber || num1 > states.state.maxNumber ||
+        num2 < states.state.minNumber || num2 > states.state.maxNumber) {
+      isValidQuestion = false;
+    }
+    
+    // For division, ensure result is > 1 and is a clean integer
+    if (op == "/" && (answer <= 1 || num1 % num2 != 0)) {
+      isValidQuestion = false;
+    }
+    
+    if (!isValidQuestion) {
       // Put the operator back since we're not using this question
       states.state.putBackOperator(op);
       return _generateNewQuestion(attempts + 1);
