@@ -552,27 +552,44 @@ class HomeRoute extends StatelessWidget {
   }
 
   Widget _buildSettingsSheet(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return StateBuilder(
       observe: () => states,
       builder: (context, _) => Container(
+        constraints: BoxConstraints(maxHeight: screenHeight * 0.9),
         padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+          left: (screenWidth * 0.05).clamp(16.0, 24.0),
+          right: (screenWidth * 0.05).clamp(16.0, 24.0),
+          top: (screenWidth * 0.05).clamp(16.0, 24.0),
+          bottom: MediaQuery.of(context).viewInsets.bottom + (screenWidth * 0.05).clamp(16.0, 24.0),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Game Settings", style: GoogleFonts.varelaRound(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 24),
+            Text("Game Settings", style: GoogleFonts.varelaRound(
+              fontSize: (screenWidth * 0.06).clamp(20.0, 24.0), 
+              fontWeight: FontWeight.bold
+            )),
+            SizedBox(height: (screenHeight * 0.02).clamp(16.0, 24.0)),
+            
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
             _buildSlider("Min Value", states.state.minNumber.toDouble(), Constants.minNumber.toDouble(), (states.state.maxNumber - 1).toDouble(), (v) => states.state.setMinNumber(v.toInt())),
             _buildSlider("Max Value", states.state.maxNumber.toDouble(), (states.state.minNumber + 1).toDouble(), Constants.maxNumber.toDouble(), (v) => states.state.setMaxNumber(v.toInt())),
             _buildSlider("Timer", states.state.maxTimer.toDouble(), Constants.minTimer.toDouble(), Constants.maxTimer.toDouble(), (v) => states.state.setMaxTimer(v.toInt())),
             _buildSlider("Rows", states.state.gridRows.toDouble(), 2, 4, (v) => states.state.setGridRows(v.toInt()), divisions: 2),
-            _buildSlider("Columns", states.state.gridColumns.toDouble(), 2, 4, (v) => states.state.setGridColumns(v.toInt()), divisions: 2),
-            const SizedBox(height: 24),
+                    _buildSlider("Columns", states.state.gridColumns.toDouble(), 2, 4, (v) => states.state.setGridColumns(v.toInt()), divisions: 2),
+                  ],
+                ),
+              ),
+            ),
+            
+            SizedBox(height: (screenHeight * 0.02).clamp(16.0, 24.0)),
             SizedBox(
               width: double.infinity,
               height: 56,
@@ -616,49 +633,73 @@ class HomeRoute extends StatelessWidget {
   }
 
   Widget _buildThemeSheet(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return StateBuilder(
       observe: () => states,
       builder: (context, _) => Container(
+        constraints: BoxConstraints(maxHeight: screenHeight * 0.9),
         padding: EdgeInsets.only(
-          left: 24,
-          right: 24,
-          top: 24,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+          left: (screenWidth * 0.05).clamp(16.0, 24.0),
+          right: (screenWidth * 0.05).clamp(16.0, 24.0),
+          top: (screenWidth * 0.05).clamp(16.0, 24.0),
+          bottom: MediaQuery.of(context).viewInsets.bottom + (screenWidth * 0.05).clamp(16.0, 24.0),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Theme Settings", style: GoogleFonts.varelaRound(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Text("Currently using ${_getThemeModeText()} theme", style: GoogleFonts.varelaRound(fontSize: 14, color: Theme.of(context).colorScheme.onSurfaceVariant)),
-            const SizedBox(height: 24),
+            Text("Theme Settings", style: GoogleFonts.varelaRound(
+              fontSize: (screenWidth * 0.06).clamp(20.0, 24.0), 
+              fontWeight: FontWeight.bold
+            )),
+            SizedBox(height: (screenHeight * 0.01).clamp(8.0, 12.0)),
+            Text("Currently using ${_getThemeModeText()} theme", style: GoogleFonts.varelaRound(
+              fontSize: (screenWidth * 0.035).clamp(12.0, 14.0), 
+              color: Theme.of(context).colorScheme.onSurfaceVariant
+            )),
+            SizedBox(height: (screenHeight * 0.02).clamp(16.0, 24.0)),
+            
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Theme Mode
+                    Text("Theme Mode", style: GoogleFonts.varelaRound(
+                      fontSize: (screenWidth * 0.045).clamp(16.0, 18.0), 
+                      fontWeight: FontWeight.w600
+                    )),
+                    SizedBox(height: (screenHeight * 0.01).clamp(8.0, 12.0)),
+                    Row(
+                      children: [
+                        _buildThemeModeButton(context, Icons.settings_rounded, 'System', ThemeMode.system),
+                        SizedBox(width: (screenWidth * 0.02).clamp(6.0, 8.0)),
+                        _buildThemeModeButton(context, Icons.wb_sunny_rounded, 'Light', ThemeMode.light),
+                        SizedBox(width: (screenWidth * 0.02).clamp(6.0, 8.0)),
+                        _buildThemeModeButton(context, Icons.nightlight_round, 'Dark', ThemeMode.dark),
+                      ],
+                    ),
 
-            // Theme Mode
-            Text("Theme Mode", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                _buildThemeModeButton(context, Icons.settings_rounded, 'System', ThemeMode.system),
-                const SizedBox(width: 8),
-                _buildThemeModeButton(context, Icons.wb_sunny_rounded, 'Light', ThemeMode.light),
-                const SizedBox(width: 8),
-                _buildThemeModeButton(context, Icons.nightlight_round, 'Dark', ThemeMode.dark),
-              ],
+                    SizedBox(height: (screenHeight * 0.025).clamp(16.0, 24.0)),
+
+                    // Theme Colors
+                    Text("Theme Color", style: GoogleFonts.varelaRound(
+                      fontSize: (screenWidth * 0.045).clamp(16.0, 18.0), 
+                      fontWeight: FontWeight.w600
+                    )),
+                    SizedBox(height: (screenHeight * 0.01).clamp(8.0, 12.0)),
+                    Wrap(
+                      spacing: (screenWidth * 0.03).clamp(8.0, 12.0),
+                      runSpacing: (screenWidth * 0.03).clamp(8.0, 12.0),
+                      children: _buildColorOptions(context),
+                    ),
+                  ],
+                ),
+              ),
             ),
 
-            const SizedBox(height: 24),
-
-            // Theme Colors
-            Text("Theme Color", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: _buildColorOptions(context),
-            ),
-
-            const SizedBox(height: 32),
+            SizedBox(height: (screenHeight * 0.025).clamp(16.0, 32.0)),
             SizedBox(
               width: double.infinity,
               height: 56,
@@ -764,45 +805,80 @@ class HomeRoute extends StatelessWidget {
   void _showAbout() {
     showModalBottomSheet(
       context: OneContext().context!,
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("About MathFinity", style: GoogleFonts.varelaRound(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 16),
-            Text("Created by Fayaz Bin Salam", style: GoogleFonts.varelaRound(fontSize: 16)),
-            const SizedBox(height: 16),
-            Text("GitHub Repository:", style: GoogleFonts.varelaRound(fontSize: 14, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 4),
-            InkWell(
-              onTap: () => launchUrl(Uri.parse("https://github.com/p32929/mathfinity")),
-              child: Text("https://github.com/p32929/mathfinity", style: GoogleFonts.varelaRound(color: Theme.of(context).colorScheme.primary, decoration: TextDecoration.underline, fontSize: 13)),
-            ),
-            const SizedBox(height: 16),
-            Text("Developer Portfolio:", style: GoogleFonts.varelaRound(fontSize: 14, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 4),
-            InkWell(
-              onTap: () => launchUrl(Uri.parse("https://p32929.github.io")),
-              child: Text("https://p32929.github.io", style: GoogleFonts.varelaRound(color: Theme.of(context).colorScheme.primary, decoration: TextDecoration.underline, fontSize: 13)),
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: FilledButton(
-                onPressed: () => Navigator.pop(context),
-                style: FilledButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      builder: (context) {
+        final screenHeight = MediaQuery.of(context).size.height;
+        final screenWidth = MediaQuery.of(context).size.width;
+        
+        return Container(
+          constraints: BoxConstraints(maxHeight: screenHeight * 0.9),
+          padding: EdgeInsets.all((screenWidth * 0.05).clamp(16.0, 24.0)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("About MathFinity", style: GoogleFonts.varelaRound(
+                fontSize: (screenWidth * 0.06).clamp(20.0, 24.0), 
+                fontWeight: FontWeight.bold
+              )),
+              SizedBox(height: (screenHeight * 0.02).clamp(16.0, 20.0)),
+              
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Created by Fayaz Bin Salam", style: GoogleFonts.varelaRound(
+                        fontSize: (screenWidth * 0.04).clamp(14.0, 16.0)
+                      )),
+                      SizedBox(height: (screenHeight * 0.02).clamp(12.0, 16.0)),
+                      Text("GitHub Repository:", style: GoogleFonts.varelaRound(
+                        fontSize: (screenWidth * 0.035).clamp(12.0, 14.0), 
+                        fontWeight: FontWeight.w600
+                      )),
+                      const SizedBox(height: 4),
+                      InkWell(
+                        onTap: () => launchUrl(Uri.parse("https://github.com/p32929/mathfinity")),
+                        child: Text("https://github.com/p32929/mathfinity", style: GoogleFonts.varelaRound(
+                          color: Theme.of(context).colorScheme.primary, 
+                          decoration: TextDecoration.underline, 
+                          fontSize: (screenWidth * 0.032).clamp(11.0, 13.0)
+                        )),
+                      ),
+                      SizedBox(height: (screenHeight * 0.02).clamp(12.0, 16.0)),
+                      Text("Developer Portfolio:", style: GoogleFonts.varelaRound(
+                        fontSize: (screenWidth * 0.035).clamp(12.0, 14.0), 
+                        fontWeight: FontWeight.w600
+                      )),
+                      const SizedBox(height: 4),
+                      InkWell(
+                        onTap: () => launchUrl(Uri.parse("https://p32929.github.io")),
+                        child: Text("https://p32929.github.io", style: GoogleFonts.varelaRound(
+                          color: Theme.of(context).colorScheme.primary, 
+                          decoration: TextDecoration.underline, 
+                          fontSize: (screenWidth * 0.032).clamp(11.0, 13.0)
+                        )),
+                      ),
+                    ],
+                  ),
                 ),
-                child: Text("Close", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
-            ),
-          ],
-        ),
-      ),
+              
+              SizedBox(height: (screenHeight * 0.025).clamp(16.0, 24.0)),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: FilledButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  ),
+                  child: Text("Close", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.bold)),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
