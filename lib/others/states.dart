@@ -3,6 +3,22 @@ import 'package:mathfinity/others/constants.dart';
 import 'package:mathfinity/others/utils.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
+class QuestionRecord {
+  final String equation;
+  final bool correct;
+  final int timeMs;
+  final int userAnswer;
+  final int correctAnswer;
+
+  QuestionRecord({
+    required this.equation,
+    required this.correct,
+    required this.timeMs,
+    required this.userAnswer,
+    required this.correctAnswer,
+  });
+}
+
 class States {
   int minNumber = Constants.minNumber,
       maxNumber = Constants.maxNumber,
@@ -25,6 +41,14 @@ class States {
   bool shouldAnimateStartButton = false;
 
   var results = List.generate(16, (index) => index + 1);
+
+  List<QuestionRecord> questionHistory = [];
+  DateTime? questionStartedAt;
+
+  // Tracks questions/answers already shown this game so they don't repeat
+  // until every combination for the current range has been used.
+  Set<String> usedQuestions = {};
+  Set<int> usedAnswers = {};
 
   // Shuffled arithmetic signs pool
   List<String> operatorPool = [];
@@ -121,6 +145,36 @@ class States {
     );
     states.state.results = res;
     states.notify();
+  }
+
+  void startQuestionTimer() {
+    questionStartedAt = DateTime.now();
+  }
+
+  void recordQuestionResult(String equation, bool correct, int userAnswer, int correctAnswer) {
+    int elapsedMs = questionStartedAt == null ? 0 : DateTime.now().difference(questionStartedAt!).inMilliseconds;
+    questionHistory.add(QuestionRecord(
+      equation: equation,
+      correct: correct,
+      timeMs: elapsedMs,
+      userAnswer: userAnswer,
+      correctAnswer: correctAnswer,
+    ));
+    states.notify();
+  }
+
+  void clearQuestionHistory() {
+    questionHistory = [];
+  }
+
+  void recordUsedQuestion(String questionKey, int answer) {
+    usedQuestions.add(questionKey);
+    usedAnswers.add(answer);
+  }
+
+  void resetUsedQuestions() {
+    usedQuestions = {};
+    usedAnswers = {};
   }
 
   setResults(List<int> results) {

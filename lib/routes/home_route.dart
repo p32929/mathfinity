@@ -11,6 +11,66 @@ import 'package:url_launcher/url_launcher.dart';
 
 Timer? gameTimer;
 
+// Smoothly pulses its child (scale) while [pulse] is true, to draw the
+// user's eye to the start button. Uses a repeating AnimationController
+// instead of a one-shot tween so the motion stays continuous and settles
+// gently when [pulse] turns off.
+class _PulsingButton extends StatefulWidget {
+  final bool pulse;
+  final Widget child;
+
+  const _PulsingButton({required this.pulse, required this.child});
+
+  @override
+  State<_PulsingButton> createState() => _PulsingButtonState();
+}
+
+class _PulsingButtonState extends State<_PulsingButton> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 600),
+  );
+  late final Animation<double> _scale = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeInOut,
+  ).drive(Tween(begin: 1.0, end: 1.06));
+
+  @override
+  void initState() {
+    super.initState();
+    _syncAnimation();
+  }
+
+  @override
+  void didUpdateWidget(covariant _PulsingButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _syncAnimation();
+  }
+
+  void _syncAnimation() {
+    if (widget.pulse) {
+      if (!_controller.isAnimating) _controller.repeat(reverse: true);
+    } else if (_controller.isAnimating || _controller.value != 0) {
+      _controller.animateTo(0, duration: const Duration(milliseconds: 200), curve: Curves.easeOut);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _scale,
+      builder: (context, child) => Transform.scale(scale: _scale.value, child: child),
+      child: widget.child,
+    );
+  }
+}
+
 class HomeRoute extends StatelessWidget {
   const HomeRoute({super.key});
 
@@ -245,74 +305,62 @@ class HomeRoute extends StatelessWidget {
   }
 
   Widget _buildStartButton(BuildContext context) {
-    return TweenAnimationBuilder<double>(
-      duration: const Duration(milliseconds: 800),
-      tween: Tween<double>(
-        begin: 1.0,
-        end: states.state.shouldAnimateStartButton ? 1.1 : 1.0,
-      ),
-      curve: Curves.elasticOut,
-      builder: (context, scale, child) {
-        return Transform.scale(
-          scale: scale,
-          child: Container(
-            width: double.infinity,
-            height: 56,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: states.state.shouldAnimateStartButton
-                  ? [
-                      BoxShadow(
-                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
-                        blurRadius: 15,
-                        spreadRadius: 3,
-                      ),
-                    ]
-                  : [],
-            ),
-            child: FilledButton(
-              onPressed: _onStartStop,
-              style: FilledButton.styleFrom(
-                backgroundColor: states.state.isGameRunning
-                    ? Theme.of(context).colorScheme.error
-                    : states.state.shouldAnimateStartButton
-                        ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.9)
-                        : Theme.of(context).colorScheme.primary,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (states.state.shouldAnimateStartButton)
-                    TweenAnimationBuilder<double>(
-                      duration: const Duration(milliseconds: 1000),
-                      tween: Tween<double>(begin: 0.0, end: 1.0),
-                      curve: Curves.bounceOut,
-                      builder: (context, bounceValue, child) {
-                        return Transform.scale(
-                          scale: 0.8 + (bounceValue * 0.4),
-                          child: Icon(
-                            Icons.play_arrow_rounded,
-                            size: 24,
-                            color: Colors.white,
-                          ),
-                        );
-                      },
-                    ),
-                  if (states.state.shouldAnimateStartButton) const SizedBox(width: 8),
-                  Text(
-                    states.state.isGameRunning ? "STOP GAME" : "START GAME",
-                    style: GoogleFonts.varelaRound(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+    bool guiding = states.state.shouldAnimateStartButton;
+
+    return _PulsingButton(
+      pulse: guiding,
+      child: Container(
+        width: double.infinity,
+        height: 56,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: guiding
+              ? [
+                  BoxShadow(
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
+                    blurRadius: 15,
+                    spreadRadius: 3,
                   ),
-                ],
-              ),
-            ),
+                ]
+              : [],
+        ),
+        child: FilledButton(
+          onPressed: _onStartStop,
+          style: FilledButton.styleFrom(
+            backgroundColor: states.state.isGameRunning
+                ? Theme.of(context).colorScheme.error
+                : guiding
+                    ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.9)
+                    : Theme.of(context).colorScheme.primary,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           ),
-        );
-      },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedSize(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
+                child: guiding
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.play_arrow_rounded, size: 24, color: Colors.white),
+                          const SizedBox(width: 8),
+                        ],
+                      )
+                    : const SizedBox.shrink(),
+              ),
+              Text(
+                states.state.isGameRunning ? "STOP GAME" : "START GAME",
+                style: GoogleFonts.varelaRound(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -322,7 +370,13 @@ class HomeRoute extends StatelessWidget {
       states.state.setLastClickedIndex(index);
       states.state.setChangingEquation(true);
 
-      if (states.state.correctAnsIndex == index) {
+      bool isCorrect = states.state.correctAnsIndex == index;
+      String equation = "${states.state.firstNumber} ${states.state.currentOperator} ${states.state.secondNumber}";
+      int userAnswer = states.state.results[index];
+      int correctAnswer = states.state.results[states.state.correctAnsIndex];
+      states.state.recordQuestionResult(equation, isCorrect, userAnswer, correctAnswer);
+
+      if (isCorrect) {
         states.state.setTotalTrue(states.state.totalTrue + 1);
       } else {
         states.state.setTotalFalse(states.state.totalFalse + 1);
@@ -345,132 +399,72 @@ class HomeRoute extends StatelessWidget {
     states.state.setShouldAnimateStartButton(false);
   }
 
+  // Enumerates every valid (num1, num2) pair for this operator within range,
+  // then picks randomly among the ones not used yet this game. Falls back to
+  // the full pool (allowing a repeat) only once every combo has been used.
+  // Returns null if the operator has no valid combination at all in range.
+  (int, int)? _findPairForOperator(String op, int minNum, int maxNum) {
+    List<(int, int)> pairs = [];
+    for (int a = minNum; a <= maxNum; a++) {
+      for (int b = minNum; b < a; b++) {
+        int answer;
+        switch (op) {
+          case '+':
+            answer = a + b;
+            break;
+          case '-':
+            answer = a - b;
+            break;
+          case 'X':
+            answer = a * b;
+            break;
+          case '/':
+            if (a % b != 0) continue;
+            answer = a ~/ b;
+            if (answer <= 1 || answer > 20) continue;
+            break;
+          default:
+            continue;
+        }
+        if (answer < 1 || answer > 500) continue;
+        pairs.add((a, b));
+      }
+    }
+    if (pairs.isEmpty) return null;
+
+    var fresh = pairs.where((p) {
+      String key = "${p.$1}$op${p.$2}";
+      int answer = _calculateAnswer(p.$1, p.$2, op);
+      return !states.state.usedQuestions.contains(key) && !states.state.usedAnswers.contains(answer);
+    }).toList();
+
+    var pool = fresh.isNotEmpty ? fresh : pairs;
+    return pool[Utils.getRandomNumber(0, pool.length - 1)];
+  }
+
   void _generateNewQuestion([int attempts = 0]) {
-    // Prevent infinite recursion - use fallback after 10 attempts
-    if (attempts > 10) {
-      // Fallback: generate a valid question within the user's range
-      int minNum = states.state.minNumber;
-      int maxNum = states.state.maxNumber;
-      
-      // Find two numbers within range that work for division
-      int num1 = minNum + ((maxNum - minNum) ~/ 2);
-      int num2 = minNum;
-      
-      var op = states.state.getNextOperator();
-      
-      // Adjust numbers for division to ensure clean result > 1
-      if (op == "/") {
-        bool foundValidDivision = false;
-        // Find a divisor within range that creates a clean division with result > 1
-        for (int divisor = minNum; divisor <= maxNum && !foundValidDivision; divisor++) {
-          if (divisor != 0) {
-            for (int dividend = minNum; dividend <= maxNum && !foundValidDivision; dividend++) {
-              if (dividend != divisor && dividend % divisor == 0) {
-                int result = dividend ~/ divisor;
-                if (result > 1 && result <= 10) {
-                  num1 = dividend;
-                  num2 = divisor;
-                  foundValidDivision = true;
-                }
-              }
-            }
-          }
-        }
-        
-        // If no valid division found, skip division for this attempt
-        if (!foundValidDivision) {
-          // Don't use division, let it fall through to use +, -, or * instead
-          op = ['+', '-', 'X'][Utils.getRandomNumber(0, 2)];
-        }
-      }
-      
-      states.state.setCurrentOperator(op);
-      states.state.setFirstNumber(num1);
-      states.state.setSecondNumber(num2);
-      
-      int totalOptions = states.state.gridRows * states.state.gridColumns;
-      var answer = _calculateAnswer(num1, num2, op);
-      List<int> results = Utils.generateNumbersCloseTo(answer, count: totalOptions);
-      int correctIndex = Utils.getRandomNumber(0, totalOptions - 1);
-      results[correctIndex] = answer;
-      states.state.setCorrectAnsIndex(correctIndex);
-      states.state.setResults(results);
-      return;
+    // Every operator in the pool has been tried with no valid combination -
+    // the range is too tight for any question. Reset and retry once.
+    if (attempts > 4) {
+      states.state.resetUsedQuestions();
+      attempts = 0;
     }
 
-    var numbersArray = Utils.generateNumberArray(
-      states.state.minNumber,
-      states.state.maxNumber,
-      shuffle: true,
-    );
-
-    int num1 = numbersArray[0];
-    int num2 = numbersArray[1];
-
-    if (num2 > num1) {
-      int temp = num1;
-      num1 = num2;
-      num2 = temp;
-    }
-
-    // Get an operator from the shuffled pool
     var op = states.state.getNextOperator();
+    var pair = _findPairForOperator(op, states.state.minNumber, states.state.maxNumber);
 
-    if (op == "/") {
-      // For division, we need both numbers in range AND result > 1
-      // Strategy: find two numbers in range where num1 = num2 * result (result > 1)
-      bool foundValidDivision = false;
-      
-      // Try to find a valid division within the range
-      // Look for combinations where both numbers are in range and result > 1
-      for (int divisor = states.state.minNumber; divisor <= states.state.maxNumber && !foundValidDivision; divisor++) {
-        if (divisor == 0) continue;
-        
-        for (int dividend = states.state.minNumber; dividend <= states.state.maxNumber && !foundValidDivision; dividend++) {
-          if (dividend != divisor && dividend % divisor == 0) {
-            int result = dividend ~/ divisor;
-            if (result > 1 && result <= 20) { // Reasonable result range
-              num1 = dividend;
-              num2 = divisor;
-              foundValidDivision = true;
-            }
-          }
-        }
-      }
-      
-      // If we couldn't find a valid division in range, fallback
-      if (!foundValidDivision) {
-        // Put the operator back and try again with a different operator
-        states.state.putBackOperator(op);
-        return _generateNewQuestion(attempts + 1);
-      }
-    }
-
-    var answer = _calculateAnswer(num1, num2, op);
-
-    // Validate that both numbers are within user's range and result is valid
-    bool isValidQuestion = true;
-    
-    if (num1 == num2 || answer < 1 || answer > 500 || 
-        num1 < states.state.minNumber || num1 > states.state.maxNumber ||
-        num2 < states.state.minNumber || num2 > states.state.maxNumber) {
-      isValidQuestion = false;
-    }
-    
-    // For division, ensure result is > 1 and is a clean integer
-    if (op == "/" && (answer <= 1 || num1 % num2 != 0)) {
-      isValidQuestion = false;
-    }
-    
-    if (!isValidQuestion) {
-      // Put the operator back since we're not using this question
+    if (pair == null) {
+      // No valid combination exists for this operator at this range - try another
       states.state.putBackOperator(op);
       return _generateNewQuestion(attempts + 1);
     }
 
-    // Only set the operator if we're keeping this question
-    states.state.setCurrentOperator(op);
+    int num1 = pair.$1;
+    int num2 = pair.$2;
+    var answer = _calculateAnswer(num1, num2, op);
+    String questionKey = "$num1$op$num2";
 
+    states.state.setCurrentOperator(op);
     states.state.setFirstNumber(num1);
     states.state.setSecondNumber(num2);
 
@@ -481,6 +475,8 @@ class HomeRoute extends StatelessWidget {
     results[correctIndex] = answer;
     states.state.setCorrectAnsIndex(correctIndex);
     states.state.setResults(results);
+    states.state.recordUsedQuestion(questionKey, answer);
+    states.state.startQuestionTimer();
   }
 
   int _calculateAnswer(int num1, int num2, String operator) {
@@ -510,6 +506,8 @@ class HomeRoute extends StatelessWidget {
     states.state.setGameRunning(true);
     states.state.setShouldAnimateStartButton(false); // Stop animation when game starts
     states.state.setCurrentTimer(states.state.maxTimer);
+    states.state.clearQuestionHistory();
+    states.state.resetUsedQuestions();
 
     // Initialize the operator pool for a new game
     states.state.initializeOperatorPool();
@@ -544,6 +542,7 @@ class HomeRoute extends StatelessWidget {
       context: OneContext().context!,
       isDismissible: true,
       enableDrag: true,
+      isScrollControlled: true,
       builder: (context) => PopScope(
         onPopInvokedWithResult: (didPop, result) {
           // Reset scores whenever dialog is dismissed in any way
@@ -554,6 +553,7 @@ class HomeRoute extends StatelessWidget {
           }
         },
         child: Container(
+        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
         padding: const EdgeInsets.all(24),
         child: SingleChildScrollView(
           child: Column(
@@ -578,6 +578,59 @@ class HomeRoute extends StatelessWidget {
                 Expanded(child: _buildResultStat("Accuracy", "${accuracy.toStringAsFixed(1)}%", Colors.orange)),
               ],
             ),
+            if (states.state.questionHistory.isNotEmpty) ...[
+              const SizedBox(height: 20),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Breakdown", style: GoogleFonts.varelaRound(fontSize: 16, fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(height: 8),
+              Column(
+                children: List.generate(states.state.questionHistory.length, (i) {
+                  final record = states.state.questionHistory[i];
+                  final color = record.correct ? Colors.green : Colors.red;
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: color.withValues(alpha: 0.25)),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          record.correct ? Icons.check_circle_rounded : Icons.cancel_rounded,
+                          color: color,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${record.equation} = ${record.correctAnswer}",
+                                style: GoogleFonts.varelaRound(fontSize: 14, fontWeight: FontWeight.w600),
+                              ),
+                              if (!record.correct)
+                                Text(
+                                  "You answered: ${record.userAnswer}",
+                                  style: GoogleFonts.varelaRound(fontSize: 12, color: color),
+                                ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          "${(record.timeMs / 1000).toStringAsFixed(1)}s",
+                          style: GoogleFonts.varelaRound(fontSize: 13, color: color, fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ),
+            ],
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
