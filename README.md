@@ -4,6 +4,10 @@
 
 MathFinity is a beautiful, fast-paced math game built with Flutter that challenges your arithmetic abilities. Race against time to solve as many math problems as possible with elegant Material You design and smooth animations.
 
+**Play in your browser:** https://p32929.github.io/mathfinity/
+
+**Downloads (Android, iOS, Windows, macOS, Linux):** [latest release](https://github.com/p32929/mathfinity/releases/latest)
+
 ## ✨ Features
 
 - 🎮 **Fast-Paced Gameplay** - Race against time to solve math problems
