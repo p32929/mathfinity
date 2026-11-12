@@ -6,7 +6,6 @@ import 'package:mathfinity/others/states.dart';
 import 'package:mathfinity/others/utils.dart';
 import 'package:one_context/one_context.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Timer? gameTimer;
@@ -85,7 +84,7 @@ class HomeRoute extends StatelessWidget {
           backgroundColor: Colors.transparent,
           title: Text(
             "MathFinity",
-            style: GoogleFonts.varelaRound(
+            style: TextStyle(fontFamily: 'VarelaRound', 
               fontWeight: FontWeight.bold,
               fontSize: 26,
             ),
@@ -203,7 +202,7 @@ class HomeRoute extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             value,
-            style: GoogleFonts.varelaRound(
+            style: TextStyle(fontFamily: 'VarelaRound', 
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: color,
@@ -211,7 +210,7 @@ class HomeRoute extends StatelessWidget {
           ),
           Text(
             title,
-            style: GoogleFonts.varelaRound(
+            style: TextStyle(fontFamily: 'VarelaRound', 
               fontSize: 10,
               color: color.withValues(alpha: 0.8),
             ),
@@ -232,7 +231,7 @@ class HomeRoute extends StatelessWidget {
       child: Center(
         child: Text(
           "${states.state.firstNumber} ${states.state.currentOperator} ${states.state.secondNumber} = ?",
-          style: GoogleFonts.varelaRound(
+          style: TextStyle(fontFamily: 'VarelaRound', 
             fontSize: 28,
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -270,6 +269,7 @@ class HomeRoute extends StatelessWidget {
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
+                      key: ValueKey('answer_$index'),
                       borderRadius: BorderRadius.circular(16),
                       onTap: () => _onNumberTap(index),
                       child: Container(
@@ -285,7 +285,7 @@ class HomeRoute extends StatelessWidget {
                         child: Center(
                           child: Text(
                             displayNumbers[index].toString(),
-                            style: GoogleFonts.varelaRound(
+                            style: TextStyle(fontFamily: 'VarelaRound', 
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).colorScheme.onSurface,
@@ -352,7 +352,7 @@ class HomeRoute extends StatelessWidget {
               ),
               Text(
                 states.state.isGameRunning ? "STOP GAME" : "START GAME",
-                style: GoogleFonts.varelaRound(
+                style: TextStyle(fontFamily: 'VarelaRound', 
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -561,7 +561,7 @@ class HomeRoute extends StatelessWidget {
             children: [
             Icon(Icons.sports_score_rounded, size: 48, color: Theme.of(context).colorScheme.primary),
             const SizedBox(height: 12),
-            Text("Game Over!", style: GoogleFonts.varelaRound(fontSize: 22, fontWeight: FontWeight.bold)),
+            Text("Game Over!", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 22, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
             Row(
               children: [
@@ -582,7 +582,7 @@ class HomeRoute extends StatelessWidget {
               const SizedBox(height: 20),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Breakdown", style: GoogleFonts.varelaRound(fontSize: 16, fontWeight: FontWeight.bold)),
+                child: Text("Breakdown", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 16, fontWeight: FontWeight.bold)),
               ),
               const SizedBox(height: 8),
               Column(
@@ -611,19 +611,19 @@ class HomeRoute extends StatelessWidget {
                             children: [
                               Text(
                                 "${record.equation} = ${record.correctAnswer}",
-                                style: GoogleFonts.varelaRound(fontSize: 14, fontWeight: FontWeight.w600),
+                                style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14, fontWeight: FontWeight.w600),
                               ),
                               if (!record.correct)
                                 Text(
                                   "You answered: ${record.userAnswer}",
-                                  style: GoogleFonts.varelaRound(fontSize: 12, color: color),
+                                  style: TextStyle(fontFamily: 'VarelaRound', fontSize: 12, color: color),
                                 ),
                             ],
                           ),
                         ),
                         Text(
                           "${(record.timeMs / 1000).toStringAsFixed(1)}s",
-                          style: GoogleFonts.varelaRound(fontSize: 13, color: color, fontWeight: FontWeight.w600),
+                          style: TextStyle(fontFamily: 'VarelaRound', fontSize: 13, color: color, fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
@@ -641,7 +641,7 @@ class HomeRoute extends StatelessWidget {
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
-                child: Text("Dismiss", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.bold)),
+                child: Text("Dismiss", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ),
           ],
@@ -662,8 +662,8 @@ class HomeRoute extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(value, style: GoogleFonts.varelaRound(fontSize: 20, fontWeight: FontWeight.bold, color: color)),
-          Text(title, style: GoogleFonts.varelaRound(fontSize: 12, color: color.withValues(alpha: 0.8))),
+          Text(value, style: TextStyle(fontFamily: 'VarelaRound', fontSize: 20, fontWeight: FontWeight.bold, color: color)),
+          Text(title, style: TextStyle(fontFamily: 'VarelaRound', fontSize: 12, color: color.withValues(alpha: 0.8))),
         ],
       ),
     );
@@ -694,7 +694,7 @@ class HomeRoute extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text("Game Settings", style: GoogleFonts.varelaRound(
+            Text("Game Settings", style: TextStyle(fontFamily: 'VarelaRound', 
               fontSize: (screenWidth * 0.06).clamp(20.0, 24.0), 
               fontWeight: FontWeight.bold
             )),
@@ -728,7 +728,7 @@ class HomeRoute extends StatelessWidget {
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
-                child: Text("Save Settings", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.bold)),
+                child: Text("Save Settings", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ),
           ],
@@ -743,7 +743,7 @@ class HomeRoute extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("$label: ${value.toInt()}", style: GoogleFonts.varelaRound(fontSize: 16, fontWeight: FontWeight.w600)),
+          Text("$label: ${value.toInt()}", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 16, fontWeight: FontWeight.w600)),
           Slider(value: value, min: min, max: max, divisions: divisions, onChanged: onChanged),
         ],
       ),
@@ -775,12 +775,12 @@ class HomeRoute extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text("Theme Settings", style: GoogleFonts.varelaRound(
+            Text("Theme Settings", style: TextStyle(fontFamily: 'VarelaRound', 
               fontSize: (screenWidth * 0.06).clamp(20.0, 24.0), 
               fontWeight: FontWeight.bold
             )),
             SizedBox(height: (screenHeight * 0.01).clamp(8.0, 12.0)),
-            Text("Currently using ${_getThemeModeText()} theme", style: GoogleFonts.varelaRound(
+            Text("Currently using ${_getThemeModeText()} theme", style: TextStyle(fontFamily: 'VarelaRound', 
               fontSize: (screenWidth * 0.035).clamp(12.0, 14.0), 
               color: Theme.of(context).colorScheme.onSurfaceVariant
             )),
@@ -792,7 +792,7 @@ class HomeRoute extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Theme Mode
-                    Text("Theme Mode", style: GoogleFonts.varelaRound(
+                    Text("Theme Mode", style: TextStyle(fontFamily: 'VarelaRound', 
                       fontSize: (screenWidth * 0.045).clamp(16.0, 18.0), 
                       fontWeight: FontWeight.w600
                     )),
@@ -810,7 +810,7 @@ class HomeRoute extends StatelessWidget {
                     SizedBox(height: (screenHeight * 0.025).clamp(16.0, 24.0)),
 
                     // Theme Colors
-                    Text("Theme Color", style: GoogleFonts.varelaRound(
+                    Text("Theme Color", style: TextStyle(fontFamily: 'VarelaRound', 
                       fontSize: (screenWidth * 0.045).clamp(16.0, 18.0), 
                       fontWeight: FontWeight.w600
                     )),
@@ -838,7 +838,7 @@ class HomeRoute extends StatelessWidget {
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
-                child: Text("Apply Theme", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.bold)),
+                child: Text("Apply Theme", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ),
           ],
@@ -880,7 +880,7 @@ class HomeRoute extends StatelessWidget {
                 Icon(icon, color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface, size: 20),
                 const SizedBox(height: 4),
                 Text(label,
-                    style: GoogleFonts.varelaRound(
+                    style: TextStyle(fontFamily: 'VarelaRound', 
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface,
@@ -941,7 +941,7 @@ class HomeRoute extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("About MathFinity", style: GoogleFonts.varelaRound(
+              Text("About MathFinity", style: TextStyle(fontFamily: 'VarelaRound', 
                 fontSize: (screenWidth * 0.06).clamp(20.0, 24.0), 
                 fontWeight: FontWeight.bold
               )),
@@ -952,32 +952,32 @@ class HomeRoute extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Created by Fayaz Bin Salam", style: GoogleFonts.varelaRound(
+                      Text("Created by Fayaz Bin Salam", style: TextStyle(fontFamily: 'VarelaRound', 
                         fontSize: (screenWidth * 0.04).clamp(14.0, 16.0)
                       )),
                       SizedBox(height: (screenHeight * 0.02).clamp(12.0, 16.0)),
-                      Text("GitHub Repository:", style: GoogleFonts.varelaRound(
+                      Text("GitHub Repository:", style: TextStyle(fontFamily: 'VarelaRound', 
                         fontSize: (screenWidth * 0.035).clamp(12.0, 14.0), 
                         fontWeight: FontWeight.w600
                       )),
                       const SizedBox(height: 4),
                       InkWell(
                         onTap: () => launchUrl(Uri.parse("https://github.com/p32929/mathfinity")),
-                        child: Text("https://github.com/p32929/mathfinity", style: GoogleFonts.varelaRound(
+                        child: Text("https://github.com/p32929/mathfinity", style: TextStyle(fontFamily: 'VarelaRound', 
                           color: Theme.of(context).colorScheme.primary, 
                           decoration: TextDecoration.underline, 
                           fontSize: (screenWidth * 0.032).clamp(11.0, 13.0)
                         )),
                       ),
                       SizedBox(height: (screenHeight * 0.02).clamp(12.0, 16.0)),
-                      Text("Developer Portfolio:", style: GoogleFonts.varelaRound(
+                      Text("Developer Portfolio:", style: TextStyle(fontFamily: 'VarelaRound', 
                         fontSize: (screenWidth * 0.035).clamp(12.0, 14.0), 
                         fontWeight: FontWeight.w600
                       )),
                       const SizedBox(height: 4),
                       InkWell(
                         onTap: () => launchUrl(Uri.parse("https://p32929.github.io")),
-                        child: Text("https://p32929.github.io", style: GoogleFonts.varelaRound(
+                        child: Text("https://p32929.github.io", style: TextStyle(fontFamily: 'VarelaRound', 
                           color: Theme.of(context).colorScheme.primary, 
                           decoration: TextDecoration.underline, 
                           fontSize: (screenWidth * 0.032).clamp(11.0, 13.0)
@@ -998,7 +998,7 @@ class HomeRoute extends StatelessWidget {
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
-                  child: Text("Close", style: GoogleFonts.varelaRound(fontSize: 18, fontWeight: FontWeight.bold)),
+                  child: Text("Close", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
               ),
             ],

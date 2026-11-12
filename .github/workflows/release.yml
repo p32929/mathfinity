@@ -1,0 +1,214 @@
+# Builds MathFinity for every platform Flutter supports and publishes a public
+# GitHub release with all the files, named with the app version.
+#
+# Runs when a version tag is pushed (for example v2.0.0), or by hand from the
+# Actions tab. The version comes from pubspec.yaml.
+name: Build and release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  version:
+    name: Read the version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: v
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed -E 's/version: *//; s/\+.*//')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Version: $VERSION"
+      - name: The tag must match pubspec.yaml
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          if [ "${GITHUB_REF_NAME}" != "v${{ steps.v.outputs.version }}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match pubspec.yaml version ${{ steps.v.outputs.version }}"
+            exit 1
+          fi
+
+  android:
+    name: Android
+    needs: version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.2 # the version these builds were tested with
+          cache: true
+      - run: flutter pub get
+      - run: flutter test
+      # One small APK per phone chip type instead of one big file with all
+      # three; debug info is stripped out of the app code.
+      - run: flutter build apk --release --split-per-abi --obfuscate --split-debug-info=build/symbols --extra-gen-snapshot-options=--strip
+      - run: |
+          V=${{ needs.version.outputs.version }}
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk "dist/MathFinity-v$V-android-arm64.apk"
+          cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk "dist/MathFinity-v$V-android-armv7.apk"
+          cp build/app/outputs/flutter-apk/app-x86_64-release.apk "dist/MathFinity-v$V-android-x86_64.apk"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: dist/*
+
+  linux:
+    name: Linux
+    needs: version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.2 # the version these builds were tested with
+          cache: true
+      - run: flutter pub get
+      - run: flutter build linux --release --obfuscate --split-debug-info=build/symbols --extra-gen-snapshot-options=--strip
+      - run: |
+          mkdir -p dist
+          tar -czf "dist/MathFinity-v${{ needs.version.outputs.version }}-linux-x64.tar.gz" -C build/linux/x64/release/bundle .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: dist/*
+
+  windows:
+    name: Windows
+    needs: version
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.2 # the version these builds were tested with
+          cache: true
+      - run: flutter pub get
+      - run: flutter build windows --release --obfuscate --split-debug-info=build/symbols --extra-gen-snapshot-options=--strip
+      - shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath "dist/MathFinity-v${{ needs.version.outputs.version }}-windows-x64.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: dist/*
+
+  macos:
+    name: macOS
+    needs: version
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.2 # the version these builds were tested with
+          cache: true
+      - run: flutter pub get
+      - run: flutter build macos --release --obfuscate --split-debug-info=build/symbols --extra-gen-snapshot-options=--strip
+      - run: |
+          mkdir -p dist
+          ditto -c -k --keepParent build/macos/Build/Products/Release/MathFinity.app "dist/MathFinity-v${{ needs.version.outputs.version }}-macos.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: dist/*
+
+  ios:
+    name: iOS
+    needs: version
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.2 # the version these builds were tested with
+          cache: true
+      - run: flutter pub get
+      # Not signed: Apple only allows signed apps on iPhones, so this file is
+      # for sideloading tools (AltStore, Sideloadly) that sign it on install.
+      - run: flutter build ios --release --no-codesign --obfuscate --split-debug-info=build/symbols --extra-gen-snapshot-options=--strip
+      - run: |
+          mkdir -p dist Payload
+          cp -R build/ios/iphoneos/Runner.app Payload/
+          zip -qry "dist/MathFinity-v${{ needs.version.outputs.version }}-ios-unsigned.ipa" Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios
+          path: dist/*
+
+  web:
+    name: Web
+    needs: version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.2 # the version these builds were tested with
+          cache: true
+      - run: flutter pub get
+      - run: flutter build web --release --base-href /mathfinity/
+      - run: |
+          mkdir -p dist
+          # The app loads its renderer (canvaskit) from Google's servers,
+          # so the local copy is left out of the download.
+          (cd build/web && zip -qr "../../dist/MathFinity-v${{ needs.version.outputs.version }}-web.zip" . -x 'canvaskit/*')
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web
+          path: dist/*
+
+  release:
+    name: Publish the release
+    needs: [version, android, linux, windows, macos, ios, web]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - run: ls -la dist
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.version.outputs.version }}
+          name: MathFinity v${{ needs.version.outputs.version }}
+          draft: false
+          prerelease: false
+          make_latest: true
+          files: dist/*
+          body: |
+            MathFinity v${{ needs.version.outputs.version }}
+
+            Use it in the browser: https://p32929.github.io/mathfinity/
+
+            | Platform | File | How to install |
+            |---|---|---|
+            | Android (almost all phones) | `MathFinity-v${{ needs.version.outputs.version }}-android-arm64.apk` | Open the file on your phone and allow installing apps from this source. |
+            | Android (older phones) | `MathFinity-v${{ needs.version.outputs.version }}-android-armv7.apk` | Use this one only if the arm64 file does not install. |
+            | Android (Chromebooks, emulators) | `MathFinity-v${{ needs.version.outputs.version }}-android-x86_64.apk` | Same as above. |
+            | Windows | `MathFinity-v${{ needs.version.outputs.version }}-windows-x64.zip` | Unzip, then run `mathfinity.exe`. If SmartScreen warns, choose More info, then Run anyway. |
+            | macOS | `MathFinity-v${{ needs.version.outputs.version }}-macos.zip` | Unzip and move MathFinity to Applications. The app is not signed: the first time, right-click it and choose Open. |
+            | Linux | `MathFinity-v${{ needs.version.outputs.version }}-linux-x64.tar.gz` | Extract, then run `./mathfinity`. Needs GTK 3. |
+            | iPhone / iPad | `MathFinity-v${{ needs.version.outputs.version }}-ios-unsigned.ipa` | Not signed. Install with a sideloading tool such as AltStore or Sideloadly. |
+            | Web | `MathFinity-v${{ needs.version.outputs.version }}-web.zip` | Upload the files to any static web host. Needs internet: the renderer loads from Google. |

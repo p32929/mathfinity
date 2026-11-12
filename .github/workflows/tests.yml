@@ -1,0 +1,176 @@
+name: Tests
+
+# Runs the real app on every platform (Android emulator, iOS simulator, macOS,
+# Windows, Linux, Chrome) and checks it: playing a game, saving settings and
+# the theme on the device, and opening links. Each test file is run on its own, because desktop devices get flaky
+# when several app launches are packed into one `flutter test` run.
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: "3.47.2"
+  FLUTTER_CHANNEL: "stable"
+  IT_FILES: "e2e_play_test e2e_settings_test e2e_theme_test e2e_links_test"
+
+jobs:
+  # ------------------------------------------------- Host-side unit/config test
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+      - run: flutter pub get
+      - name: Run host tests (network config, etc.)
+        run: flutter test test/
+
+  # ---------------------------------------------------------------- macOS + iOS
+  apple:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [macos, ios]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+      - run: flutter pub get
+      - name: Boot iOS simulator
+        if: matrix.target == 'ios'
+        run: |
+          UDID=$(xcrun simctl list devices available | grep -m1 -oE '[0-9A-F-]{36}')
+          echo "Booting $UDID"
+          xcrun simctl boot "$UDID" || true
+          echo "DEVICE_ID=$UDID" >> "$GITHUB_ENV"
+      - name: Set macOS device
+        if: matrix.target == 'macos'
+        run: echo "DEVICE_ID=macos" >> "$GITHUB_ENV"
+      - name: Run integration tests (${{ matrix.target }})
+        run: |
+          bad=""
+          for f in $IT_FILES; do
+            echo "::group::$f"
+            flutter test integration_test/$f.dart -d "$DEVICE_ID" || bad="$bad $f"
+            echo "::endgroup::"
+          done
+          [ -z "$bad" ] || { echo "::error::Failed:$bad"; exit 1; }
+
+  # -------------------------------------------------------------------- Android
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+      - run: flutter pub get
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Run integration tests on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          profile: pixel_6
+          # each line of this script runs on its own, so the loop is one line
+          script: bad=""; for f in $IT_FILES; do echo "::group::$f"; flutter test integration_test/$f.dart -d emulator-5554 || bad="$bad $f"; echo "::endgroup::"; done; [ -z "$bad" ] || { echo "::error::Failed:$bad"; exit 1; }
+
+  # ---------------------------------------------------------------------- Linux
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Linux deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libgtk-3-dev clang cmake pkg-config xvfb xdg-utils
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+      - run: flutter pub get
+      # The test machine has no default browser for web links; a real desktop does.
+      - run: xdg-settings set default-web-browser google-chrome.desktop
+      - name: Run integration tests (Linux, under xvfb)
+        run: |
+          xvfb-run -a bash -c '
+            bad=""
+            for f in $IT_FILES; do
+              echo "::group::$f"
+              flutter test integration_test/$f.dart -d linux || bad="$bad $f"
+              echo "::endgroup::"
+            done
+            [ -z "$bad" ] || { echo "::error::Failed:$bad"; exit 1; }
+          '
+
+  # -------------------------------------------------------------------- Windows
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+      - run: flutter pub get
+      - name: Run integration tests (Windows)
+        shell: pwsh
+        run: |
+          $bad = @()
+          foreach ($f in $env:IT_FILES.Split(" ")) {
+            Write-Host "::group::$f"
+            flutter test integration_test/$f.dart -d windows
+            if ($LASTEXITCODE -ne 0) { $bad += $f }
+            Write-Host "::endgroup::"
+          }
+          if ($bad.Count -gt 0) { Write-Host "::error::Failed: $bad"; exit 1 }
+
+  # ------------------------------------------------------------------------ Web
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+      - run: flutter pub get
+      - uses: nanasess/setup-chromedriver@v2
+      - name: Run integration tests (Web / Chrome)
+        run: |
+          export DISPLAY=:99
+          chromedriver --port=4444 &
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+          sleep 3
+          bad=""
+          for f in $IT_FILES; do
+            echo "::group::$f"
+            flutter drive \
+              --driver=test_driver/integration_test.dart \
+              --target=integration_test/$f.dart \
+              -d web-server --browser-name chrome --release || bad="$bad $f"
+            echo "::endgroup::"
+          done
+          [ -z "$bad" ] || { echo "::error::Failed:$bad"; exit 1; }
