@@ -1,34 +1,12 @@
-# 🧮 MathFinity
+# MathFinity
 
-**Test your math skills with unlimited fun!**
+A free mental maths game for the browser, Android, iPhone, Windows, macOS and Linux. Worksheets are slow and boring, so MathFinity turns practice into a quick game: solve sums against the clock, then see exactly which ones slowed you down. No ads and no account.
 
-MathFinity is a beautiful, fast-paced math game built with Flutter that challenges your arithmetic abilities. Race against time to solve as many math problems as possible with elegant Material You design and smooth animations.
+**Play in your browser:** [p32929.github.io/mathfinity](https://p32929.github.io/mathfinity/)
 
-**Play in your browser:** https://p32929.github.io/mathfinity/
+**Download for Android, iPhone, Windows, macOS and Linux:** [latest release](https://github.com/p32929/mathfinity/releases/latest)
 
-**Downloads (Android, iOS, Windows, macOS, Linux):** [latest release](https://github.com/p32929/mathfinity/releases/latest)
-
-## ✨ Features
-
-- 🎮 **Fast-Paced Gameplay** - Race against time to solve math problems
-- 🎨 **Material You Design** - Beautiful, modern UI with dynamic theming
-- 🌈 **8 Color Themes** - Personalize your experience with vibrant colors
-- 🌙 **Dark/Light Mode** - Comfortable gaming in any lighting
-- ⚙️ **Customizable Grid** - Choose from 2x2 to 4x4 answer grids
-- 📊 **Real-time Stats** - Track your correct/wrong answers and accuracy
-- ⏱️ **Adjustable Timer** - Set your preferred game duration
-- 💫 **Smooth Animations** - Elegant feedback for every interaction
-- 🎯 **Visual Feedback** - Glowing effects for correct/wrong answers
-- 📱 **Cross-Platform** - Works on Web, Android, iOS, and Desktop
-
-## 🎯 How to Play
-
-1. **Customize** your game settings (grid size, timer, difficulty)
-2. **Click START GAME** to begin the challenge
-3. **Solve** the math equation by clicking the correct answer
-4. **Beat the clock** and achieve the highest accuracy!
-
-# Screenshots
+## Screenshots
 
 <div align="center">
   <img width="180" src="https://github.com/user-attachments/assets/98e09e54-f34f-419f-8516-34559926c44f" alt="Screenshot 1" />
@@ -134,40 +112,52 @@ This approach helps avoid duplicate efforts and ensures smooth collaboration. Th
   <a href="#-contributing">🤝 Contribute</a>
 </div>
 
-## 🔗 Share
+## Features
 
-Sharing this repository with your friends is just one click away from here
+1. **Answer fast:** a sum appears (add, subtract, multiply or divide) and you pick the right answer from the grid.
+2. **Know right away** whether you were right. New sums keep coming until the time runs out.
+3. **See where you were slow:** your score, accuracy and time, plus every sum with how long you took.
+4. **Make it easier or harder:** choose the number range, the game length and how many answers to pick from (2x2 up to 4x4).
+5. **Your look:** light or dark mode and eight colours to choose from.
+6. **Works offline** once it is installed.
 
-[![facebook](https://user-images.githubusercontent.com/6418354/179013321-ac1d1452-0689-493f-9066-940cf2302b6e.png)](https://www.facebook.com/sharer/sharer.php?u=https://github.com/p32929/mathfinity/)
-[![twitter](https://user-images.githubusercontent.com/6418354/179013351-7d8d6d1c-4ce2-46ab-bef8-4c4765a1b888.png)](https://twitter.com/intent/tweet?url=https://github.com/p32929/mathfinity/)
-[![tumblr](https://user-images.githubusercontent.com/6418354/179013343-3111f55a-3b90-40c7-8487-9777348672b0.png)](https://www.tumblr.com/share?v=3&u=https://github.com/p32929/mathfinity/)
-[![pocket](https://user-images.githubusercontent.com/6418354/179013334-b095c45f-becf-49f4-9ee1-5a731a9b1f85.png)](https://getpocket.com/save?url=https://github.com/p32929/mathfinity/)
-[![pinterest](https://user-images.githubusercontent.com/6418354/179013331-44cd9206-11b1-4b65-becb-5863b61c828f.png)](https://pinterest.com/pin/create/button/?url=https://github.com/p32929/mathfinity/)
-[![reddit](https://user-images.githubusercontent.com/6418354/179013338-7416ae3f-73ba-4522-86e1-1374d7082d22.png)](https://www.reddit.com/submit?url=https://github.com/p32929/mathfinity/)
-[![linkedin](https://user-images.githubusercontent.com/6418354/179013327-ca7b7102-1da8-4b1c-858f-1a6e5f21bd70.png)](https://www.linkedin.com/shareArticle?mini=true&url=https://github.com/p32929/mathfinity/)
-[![whatsapp](https://user-images.githubusercontent.com/6418354/179013353-f477fa0b-3e6f-4138-a357-c9991b23ff88.png)](https://api.whatsapp.com/send?text=https://github.com/p32929/mathfinity/)
+## How to play
 
----
+1. Pick your settings: number range, timer and grid size.
+2. Tap **START GAME**.
+3. Tap the right answer for each sum, as fast as you can.
+4. When the time is up, look at your results and see which sums took the longest.
+
+## Build it yourself
+
+1. Install [Flutter](https://flutter.dev/).
+2. Get the code and its packages:
+
+   ```bash
+   git clone https://github.com/p32929/mathfinity.git
+   cd mathfinity
+   flutter pub get
+   ```
+
+3. Run it:
+
+   ```bash
+   flutter run -d chrome   # in the browser
+   flutter run             # on a phone or your computer
+   ```
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for the full text.
+
+## Contributing
+
+Contributions are very welcome, thank you! Before you start on a pull request, please open an issue and tell me what you would like to add or change. That way we can agree on it first, and your time is not spent on something that might not fit. Thanks for helping make MathFinity better.
+
+## Share
+
+<a href="https://p32929.github.io/share/?repo=mathfinity"><img src="https://p32929.github.io/readme/share.svg" alt="Share this with your friends in just a click" width="420"></a>
 
 ## Support
 
-If this saved you time, you can buy me a coffee — it keeps these projects maintained and free.
-
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-%E2%98%95-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/p32929)
-
-<!-- hire-block -->
-
----
-
-## 💼 Using this at a company?
-
-I do fixed-price delivery work on my own projects. One invoice, one date, no hourly billing:
-
-| | |
-|---|---|
-| **White-label build** — this project rebranded, extended and deployed as yours | **$6,500** · 3 weeks |
-| **Custom app from scratch** on my own stack, signed and auto-updating | **$12,500** · 6 weeks |
-| **Production-hardening sprint** — 72 hours on this project, for your load and your security review | **$999** |
-| **Ongoing capacity** — one project-week of my time reserved every month | **$9,000 / month** |
-
-Full details → **[p32929.github.io/hire](https://p32929.github.io/hire/)** · Email **[fayazdevinbox@uberip.com](mailto:fayazdevinbox@uberip.com)** — scoping and quotes are free and I answer within one business day.
+<a href="https://p32929.github.io/support/"><img src="https://p32929.github.io/readme/support.svg" alt="If you like my works and want to support me, feel free to support" width="420"></a>
